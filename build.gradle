@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id "org.sonarqube" version "2.7"
+    id 'jacoco'
+    id 'io.franzbecker.gradle-lombok' version '3.0.0'
+}
+
+group 'com.ranking'
+version '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version
+
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
+}
+
+sonarqube {
+    properties {
+        property 'sonar.projectName', 'Ranking'
+        property 'sonar.coverage.exclusions', "**/RankingApplication.java"
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+    }
+}

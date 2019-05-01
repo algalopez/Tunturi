@@ -1,7 +1,10 @@
-# Ignore everything
-*
+# Extensions
+.log
 
-# Except
-!.gitignore
-!README.md
-!LICENSE.md
+# Root
+gradlew
+gradlew.bat
+
+.gradle
+.idea
+gradle/
