@@ -18,6 +18,8 @@ repositories {
 dependencies {
 
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: spring_boot_version
+    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.1'
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
 }
@@ -34,4 +36,10 @@ jacocoTestReport {
         xml.enabled false
         csv.enabled false
     }
+}
+
+task createDatabase(type: Exec) {
+    group = 'Ranking'
+    workingDir "${rootDir}/database"
+    commandLine 'sh', './PrepareDatabase.sh'
 }

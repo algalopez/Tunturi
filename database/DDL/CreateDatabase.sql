@@ -1,0 +1,11 @@
+DROP DATABASE IF EXISTS `ranking`;
+
+CREATE DATABASE IF NOT EXISTS `ranking` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+
+USE `ranking`
+
+CREATE TABLE sample (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `sample` varchar(200) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
