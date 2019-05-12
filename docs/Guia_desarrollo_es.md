@@ -59,7 +59,7 @@ Las versiones constarán de 3 números: Major.Minor.Patch con la siguiente semá
 
 En las ramas que no sean master, se mantendrá el sufijo -SNAPSHOT tras el número de versión.
 
-Ej: Ranking-1.0.3-SNAPSHOT
+Ej: Ranking-1.1.0-SNAPSHOT
 
 ## Guia de estilo
 
