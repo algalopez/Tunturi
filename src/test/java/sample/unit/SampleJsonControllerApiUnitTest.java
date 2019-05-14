@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(locations = "classpath:test.properties")
 public class SampleJsonControllerApiUnitTest {
 
-    private static final String ENDPOINT = "/api/sample/";
+    private static final String ENDPOINT = "/api/public/sample/";
 
     @Mock
     private SampleService sampleService;

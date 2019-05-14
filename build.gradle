@@ -20,6 +20,9 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: spring_boot_version
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: spring_boot_version
+    compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: spring_boot_version
+//    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: spring_boot_version
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: mariadb_version
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
@@ -29,7 +32,7 @@ sonarqube {
     properties {
         property 'sonar.projectKey', 'Ranking'
         property 'sonar.projectName', 'Ranking'
-        property 'sonar.projectVersion', "${project_version}"
+        property 'sonar.projectVersion', project_version
         property 'sonar.language', 'java'
         property 'sonar.sources', 'src/main/java'
         property 'sonar.tests', 'src/test/java'

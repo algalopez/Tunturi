@@ -33,7 +33,7 @@ public class SampleJsonControllerUnitTest {
         SampleDto mockedSample = new SampleDto(1, "sample");
         when(sampleService.getSample(1)).thenReturn(mockedSample);
 
-        ResponseEntity<SampleDto> responseEntity = sampleJsonController.sample();
+        ResponseEntity<SampleDto> responseEntity = sampleJsonController.publicSample();
 
         Assert.assertEquals(mockedSample, responseEntity.getBody());
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
