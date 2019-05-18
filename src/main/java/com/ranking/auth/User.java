@@ -1,49 +1,32 @@
 package com.ranking.auth;
 
-import org.springframework.security.core.GrantedAuthority;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class User implements UserDetails {
 
     static final long serialVersionUID = 1L;
 
     private Long id;
-
     private String username;
-
     private String password;
-
     private boolean enabled;
-
-    public User() {
-        this.id = 2L;
-        this.username = "user";
-        this.password = "{noop}pass";
-        this.enabled = true;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    private boolean locked;
+    private List<SimpleGrantedAuthority> authorities;
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
+        return !locked;
     }
 
     @Override
@@ -59,5 +42,20 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public List<SimpleGrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 }

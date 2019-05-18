@@ -28,12 +28,36 @@ public class SampleJsonControllerUnitTest {
     }
 
     @Test
-    public void testSample() {
+    public void testPublicSample() {
 
         SampleDto mockedSample = new SampleDto(1, "sample");
         when(sampleService.getSample(1)).thenReturn(mockedSample);
 
-        ResponseEntity<SampleDto> responseEntity = sampleJsonController.publicSample();
+        ResponseEntity<SampleDto> responseEntity = sampleJsonController.publicSample("user");
+
+        Assert.assertEquals(mockedSample, responseEntity.getBody());
+        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void testPrivateSample() {
+
+        SampleDto mockedSample = new SampleDto(2, "sample");
+        when(sampleService.getSample(1)).thenReturn(mockedSample);
+
+        ResponseEntity<SampleDto> responseEntity = sampleJsonController.privateSample("user");
+
+        Assert.assertEquals(mockedSample, responseEntity.getBody());
+        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void testAdminSample() {
+
+        SampleDto mockedSample = new SampleDto(3, "sample");
+        when(sampleService.getSample(1)).thenReturn(mockedSample);
+
+        ResponseEntity<SampleDto> responseEntity = sampleJsonController.adminSample("user");
 
         Assert.assertEquals(mockedSample, responseEntity.getBody());
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

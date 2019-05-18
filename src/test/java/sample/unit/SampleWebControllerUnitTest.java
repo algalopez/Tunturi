@@ -28,12 +28,37 @@ public class SampleWebControllerUnitTest {
     }
 
     @Test
-    public void testSample() {
+    public void testPublicSample() {
 
-        when(sampleService.getSample(1)).thenReturn(new SampleDto(1, "sample"));
+        SampleDto mockedSample = new SampleDto(1, "sample");
+        when(sampleService.getSample(1)).thenReturn(mockedSample);
 
         Model model = new ExtendedModelMap();
-        String webPage = sampleWebController.sample(model);
+        String webPage = sampleWebController.publicSample("user", model);
+
+        Assert.assertEquals("sample", webPage);
+    }
+
+    @Test
+    public void testPrivateSample() {
+
+        SampleDto mockedSample = new SampleDto(2, "sample");
+        when(sampleService.getSample(2)).thenReturn(mockedSample);
+
+        Model model = new ExtendedModelMap();
+        String webPage = sampleWebController.privateSample("user", model);
+
+        Assert.assertEquals("sample", webPage);
+    }
+
+    @Test
+    public void testAdminSample() {
+
+        SampleDto mockedSample = new SampleDto(3, "sample");
+        when(sampleService.getSample(3)).thenReturn(mockedSample);
+
+        Model model = new ExtendedModelMap();
+        String webPage = sampleWebController.adminSample("user", model);
 
         Assert.assertEquals("sample", webPage);
     }

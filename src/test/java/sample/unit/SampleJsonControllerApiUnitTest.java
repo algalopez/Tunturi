@@ -31,8 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(locations = "classpath:test.properties")
 public class SampleJsonControllerApiUnitTest {
 
-    private static final String ENDPOINT = "/api/public/sample/";
-
     @Mock
     private SampleService sampleService;
 
@@ -46,7 +44,9 @@ public class SampleJsonControllerApiUnitTest {
     }
 
     @Test
-    public void testSampleApi() throws Exception {
+    public void testPublicApi() throws Exception {
+
+        final String endpoint = "/api/public/sample/user";
 
         SampleDto sampleDto = new SampleDto(232, "example");
         when(sampleService.getSample(anyInt())).thenReturn(sampleDto);
@@ -54,7 +54,41 @@ public class SampleJsonControllerApiUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         final String expectedResult = objectMapper.writeValueAsString(sampleDto);
 
-        mockMvc.perform(get(ENDPOINT).accept(MimeTypeUtils.APPLICATION_JSON_VALUE))
+        mockMvc.perform(get(endpoint).accept(MimeTypeUtils.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(expectedResult)));
+    }
+
+    @Test
+    public void testPrivateApi() throws Exception {
+
+        final String endpoint = "/api/sample/user";
+
+        SampleDto sampleDto = new SampleDto(232, "example");
+        when(sampleService.getSample(anyInt())).thenReturn(sampleDto);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        final String expectedResult = objectMapper.writeValueAsString(sampleDto);
+
+        mockMvc.perform(get(endpoint).accept(MimeTypeUtils.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(expectedResult)));
+    }
+
+    @Test
+    public void testAdminApi() throws Exception {
+
+        final String endpoint = "/api/admin/sample/user";
+
+        SampleDto sampleDto = new SampleDto(232, "example");
+        when(sampleService.getSample(anyInt())).thenReturn(sampleDto);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        final String expectedResult = objectMapper.writeValueAsString(sampleDto);
+
+        mockMvc.perform(get(endpoint).accept(MimeTypeUtils.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(expectedResult)));

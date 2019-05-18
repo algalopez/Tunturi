@@ -22,10 +22,10 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: spring_boot_version
     compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: spring_boot_version
-//    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: spring_boot_version
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: mariadb_version
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.1.5.RELEASE'
 }
 
 sonarqube {
@@ -37,7 +37,8 @@ sonarqube {
         property 'sonar.sources', 'src/main/java'
         property 'sonar.tests', 'src/test/java'
         property 'sonar.sourceEncoding', 'UTF-8'
-        property 'sonar.coverage.exclusions', '**/RankingApplication.java'
+        property 'sonar.exclusions', '**/RankingApplication.java, **/*Config.java, **/*Constants.java'
+        property 'sonar.coverage.exclusions', '**/RankingApplication.java, **/*Config.java, **/*Constants.java'
     }
 }
 
@@ -52,4 +53,10 @@ task createDatabase(type: Exec) {
     group = 'Ranking'
     workingDir "${rootDir}/database"
     commandLine 'sh', './PrepareDatabase.sh'
+}
+
+task populateDatabase(type: Exec) {
+    group = 'Ranking'
+    workingDir "${rootDir}/database"
+    commandLine 'sh', './PopulateDatabase.sh'
 }

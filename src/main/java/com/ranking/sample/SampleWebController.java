@@ -2,15 +2,22 @@ package com.ranking.sample;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.UUID;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("web")
 @Slf4j
 public class SampleWebController {
+
+    private static final String SAMPLE_WEB  = "sample";
+    private static final String ATTRIBUTE_ID = "id";
+    private static final String ATTRIBUTE_SAMPLE = "sample";
 
     private SampleService sampleService;
 
@@ -19,17 +26,31 @@ public class SampleWebController {
         this.sampleService = sampleService;
     }
 
-    @GetMapping(value = {"web/sample"})
-    public String sample(Model model) {
+    @GetMapping(value = "/public/sample/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String publicSample(@PathVariable(name = "username", required = true) String username, Model model) {
 
-        UUID uuid = UUID.randomUUID();
-
-        log.info("Request  {} web/sample/: {}", uuid);
         SampleDto sampleDto = sampleService.getSample(1);
-        log.info("Response {} web/sample/: {}", uuid, sampleDto);
+        model.addAttribute(ATTRIBUTE_ID, sampleDto.getId());
+        model.addAttribute(ATTRIBUTE_SAMPLE, sampleDto.getSample());
+        return SAMPLE_WEB;
+    }
 
-        model.addAttribute("id", sampleDto.getId());
-        model.addAttribute("sample", sampleDto.getSample());
-        return "sample";
+    @PreAuthorize("#username == authentication.principal.username")
+    @GetMapping(value = "/sample/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String privateSample(@PathVariable(name = "username", required = true) String username, Model model) {
+
+        SampleDto sampleDto = sampleService.getSample(2);
+        model.addAttribute(ATTRIBUTE_ID, sampleDto.getId());
+        model.addAttribute(ATTRIBUTE_SAMPLE, sampleDto.getSample());
+        return SAMPLE_WEB;
+    }
+
+    @GetMapping(value = "/admin/sample/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String adminSample(@PathVariable(name = "username", required = true) String username, Model model) {
+
+        SampleDto sampleDto = sampleService.getSample(3);
+        model.addAttribute(ATTRIBUTE_ID, sampleDto.getId());
+        model.addAttribute(ATTRIBUTE_SAMPLE, sampleDto.getSample());
+        return SAMPLE_WEB;
     }
 }

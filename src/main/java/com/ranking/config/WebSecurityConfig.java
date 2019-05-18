@@ -1,8 +1,7 @@
 package com.ranking.config;
 
-import com.ranking.auth.UserService;
+import com.ranking.auth.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,7 +9,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -18,7 +18,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 
     @Override
     @Bean
@@ -28,38 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService);
+        auth
+                .userDetailsService(userServiceImpl)
+                .passwordEncoder(passwordEncoder);
     }
-
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//
-//        http.httpBasic().and()
-//                .csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers("/api/public").permitAll()
-//                .antMatchers("/api/admin").access("hasRole('ADMIN')")
-//                .anyRequest().authenticated();
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder(ENCODER_STRENGTH);
-//    }
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("user")
-//                .password(passwordEncoder().encode("user"))
-//                .roles("USER")
-//                .and()
-//                .withUser("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .roles("USER", "ADMIN");
-//    }
-
 }
