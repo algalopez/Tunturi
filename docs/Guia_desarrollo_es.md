@@ -16,7 +16,7 @@ Estas credenciales las utilizará la tarea de gradle createDatabase para crear l
 Posiblemente funcione con versiones posteriores. 
 En CI se crea un wrapper con la versión 4.4.1.
 
-**Intellij** (ideaIC-2018.2.5 Community Edition)
+**Intellij** (ideaIC-2019.1.2 Community Edition)
 
 Para programar es necesario también añadir el plugin: IntelliJ Lombok plugin
 
@@ -38,7 +38,7 @@ Para realizar cualquier contribución al proyecto, se debe crear una issue si no
 
 Dependiendo de los permisos del usuario en el proyecto:
 
-- Si no se tienen permisos de escritura, se trabajará mediante [ForkFlow](https://es.atlassian.com/git/tutorials/comparing-workflows/forking-workflow)
+- Si no se tienen permisos de escritura, se trabajará mediante [ForkFork](https://es.atlassian.com/git/tutorials/comparing-workflows/forking-workflow)
 - Si se tienen permisos de escritura, se trabajará mediante [GitFlow](https://es.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
 
 Mejores prácticas: 
@@ -59,7 +59,7 @@ Las versiones constarán de 3 números: Major.Minor.Patch con la siguiente semá
 
 En las ramas que no sean master, se mantendrá el sufijo -SNAPSHOT tras el número de versión.
 
-Ej: Ranking-1.1.0-SNAPSHOT
+Ej: JavaBoilerplate-1.1.0-SNAPSHOT
 
 ## Guia de estilo
 
