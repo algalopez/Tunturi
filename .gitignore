@@ -1,12 +1,16 @@
 # Extensions
-.log
+*.log
+*.jar
+*.zip
 
 # Root
 gradlew
 gradlew.bat
 
-.gradle
-.idea
+# Root folders
+.gradle/
+.idea/
 gradle/
 build/
 out/
+logs/
