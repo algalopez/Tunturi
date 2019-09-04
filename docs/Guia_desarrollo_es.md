@@ -11,10 +11,10 @@ Aplicación programada en java8
 Para poder realizar tests en local es necesario crear el usuario "user" con contraseña "pass".
 Estas credenciales las utilizará la tarea de gradle createDatabase para crear la estructura e insertar unos datos mínimos para realizar los tests.
 
-**Gradle** (4.4.1)
+**Gradle** (5.6.1)
 
 Posiblemente funcione con versiones posteriores. 
-En CI se crea un wrapper con la versión 4.4.1.
+En CI se crea un wrapper con la versión 5.6.1.
 
 **Intellij** (ideaIC-2019.1.2 Community Edition)
 
@@ -59,7 +59,7 @@ Las versiones constarán de 3 números: Major.Minor.Patch con la siguiente semá
 
 En las ramas que no sean master, se mantendrá el sufijo -SNAPSHOT tras el número de versión.
 
-Ej: JavaBoilerplate-1.1.0-SNAPSHOT
+Ej: Ranking-1.1.0-SNAPSHOT
 
 ## Guia de estilo
 

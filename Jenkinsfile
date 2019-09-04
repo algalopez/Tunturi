@@ -5,7 +5,7 @@ pipeline {
         stage('Prepare environment') {
             steps {
                 echo 'Add gradle with version...'
-                sh 'gradle wrapper --gradle-version=4.4.1'
+                sh 'gradle wrapper --gradle-version=5.6.1'
             }
         }
         stage('Create Database') {

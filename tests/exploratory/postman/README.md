@@ -9,7 +9,7 @@ Load database with populateDatabase gradle task and import Ranking.postman_colle
 **Clients**
 
 * clientID = client
-* clientPassword = sercret
+* clientPassword = secret
 
 **Users**
 

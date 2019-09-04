@@ -1,3 +1,3 @@
-# JavaBoilerplate
+# Ranking
 
-Boilerplate code for new spring boot projects 
+
