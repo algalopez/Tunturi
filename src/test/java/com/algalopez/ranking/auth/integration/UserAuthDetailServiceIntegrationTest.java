@@ -1,7 +1,7 @@
 package com.algalopez.ranking.auth.integration;
 
 import com.algalopez.ranking.RankingApplication;
-import com.algalopez.ranking.auth.User;
+import com.algalopez.ranking.auth.UserAuth;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(classes = RankingApplication.class)
 @TestPropertySource(locations = "classpath:test.properties")
 @Transactional
-public class UserDetailServiceIntegrationTest {
+public class UserAuthDetailServiceIntegrationTest {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -39,19 +39,19 @@ public class UserDetailServiceIntegrationTest {
 
         Long userId;
 
-        User expectedUser1 = buildUser("user1", "pass1", false, false, "USER");
-        userId = insertUser(expectedUser1);
-        expectedUser1.setId(userId);
+        UserAuth expectedUserAuth1 = buildUser("user1", "pass1", false, false, "USER");
+        userId = insertUser(expectedUserAuth1);
+        expectedUserAuth1.setId(userId);
 
-        User expectedUser2 = buildUser("user2", "pass2", true, true, "ADMIN");
-        userId = insertUser(expectedUser2);
-        expectedUser2.setId(userId);
+        UserAuth expectedUserAuth2 = buildUser("user2", "pass2", true, true, "ADMIN");
+        userId = insertUser(expectedUserAuth2);
+        expectedUserAuth2.setId(userId);
 
-        User actualUser1 = (User) userDetailsService.loadUserByUsername(expectedUser1.getUsername());
-        User actualUser2 = (User) userDetailsService.loadUserByUsername(expectedUser2.getUsername());
+        UserAuth actualUserAuth1 = (UserAuth) userDetailsService.loadUserByUsername(expectedUserAuth1.getUsername());
+        UserAuth actualUserAuth2 = (UserAuth) userDetailsService.loadUserByUsername(expectedUserAuth2.getUsername());
 
-        assertEquals(expectedUser1 ,actualUser1);
-        assertEquals(expectedUser2 ,actualUser2);
+        assertEquals(expectedUserAuth1, actualUserAuth1);
+        assertEquals(expectedUserAuth2, actualUserAuth2);
     }
 
     @Test(expected = UsernameNotFoundException.class)
@@ -59,25 +59,25 @@ public class UserDetailServiceIntegrationTest {
         userDetailsService.loadUserByUsername("NonExistingUser");
     }
 
-    private Long insertUser(User user) {
+    private Long insertUser(UserAuth userAuth) {
 
-        final String insertSql = "INSERT INTO `user` (username, password, enabled, locked, role) " +
+        final String insertSql = "INSERT INTO `user_auth` (username, password, enabled, locked, role) " +
                 "VALUES (:username, :password, :enabled, :locked, :role)";
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("username", user.getUsername());
-        parameters.put("password", user.getPassword());
-        parameters.put("enabled", user.isEnabled());
-        parameters.put("locked", !user.isAccountNonLocked());
-        parameters.put("role", user.getAuthorities().get(0).getAuthority());
+        parameters.put("username", userAuth.getUsername());
+        parameters.put("password", userAuth.getPassword());
+        parameters.put("enabled", userAuth.isEnabled());
+        parameters.put("locked", !userAuth.isAccountNonLocked());
+        parameters.put("role", userAuth.getAuthorities().get(0).getAuthority());
         namedParameterJdbcTemplate.update(insertSql, parameters);
 
-        final String queryUser = "SELECT id FROM `user` WHERE username=:username";
-        SqlParameterSource queryParams = new MapSqlParameterSource("username", user.getUsername());
+        final String queryUser = "SELECT id FROM `user_auth` WHERE username=:username";
+        SqlParameterSource queryParams = new MapSqlParameterSource("username", userAuth.getUsername());
         return namedParameterJdbcTemplate.queryForObject(queryUser, queryParams, Long.class);
     }
 
-    private User buildUser(String username, String password, Boolean enabled, Boolean locked, String role) {
-        return User.builder()
+    private UserAuth buildUser(String username, String password, Boolean enabled, Boolean locked, String role) {
+        return UserAuth.builder()
                 .username(username)
                 .password(password)
                 .enabled(enabled)

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class User implements UserDetails {
+public class UserAuth implements UserDetails {
 
     static final long serialVersionUID = 1L;
 

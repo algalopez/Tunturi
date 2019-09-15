@@ -35,29 +35,29 @@ public class AuthenticationServiceImpl implements AuthenticationProvider {
             return null;
         }
 
-        User user;
+        UserAuth userAuth;
         try {
-            user = (User) this.userService.loadUserByUsername(providedUsername);
+            userAuth = (UserAuth) this.userService.loadUserByUsername(providedUsername);
         } catch (UsernameNotFoundException e) {
             throw new BadCredentialsException(INVALID_USERNAME_OR_CREDENTIALS);
         }
 
-        if (!providedPassword.equals(user.getPassword())) {
+        if (!providedPassword.equals(userAuth.getPassword())) {
             throw new BadCredentialsException(INVALID_USERNAME_OR_CREDENTIALS);
         }
 
-        if (!user.isEnabled()) {
+        if (!userAuth.isEnabled()) {
             throw new DisabledException(DISABLED_ACCOUNT);
         }
 
-        if (user.isLocked()) {
+        if (userAuth.isLocked()) {
             throw new LockedException(LOCKED_ACCOUNT);
         }
 
         return new UsernamePasswordAuthenticationToken(
-                user.getUsername(),
-                user.getPassword(),
-                user.getAuthorities());
+                userAuth.getUsername(),
+                userAuth.getPassword(),
+                userAuth.getAuthorities());
     }
 
     @Override

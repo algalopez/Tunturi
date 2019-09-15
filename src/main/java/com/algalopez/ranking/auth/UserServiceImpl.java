@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserServiceImpl implements UserDetailsService {
 
-    private UserDao userDao;
+    private UserAuthDao userAuthDao;
 
-    public UserServiceImpl(@Autowired UserDao userDao) {
-        this.userDao = userDao;
+    public UserServiceImpl(@Autowired UserAuthDao userAuthDao) {
+        this.userAuthDao = userAuthDao;
     }
 
     /**
@@ -27,14 +27,14 @@ public class UserServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
 
-        User user;
+        UserAuth userAuth;
         try {
-            user = (User) userDao.findByUsername(username);
+            userAuth = (UserAuth) userAuthDao.findByUsername(username);
         } catch (EmptyResultDataAccessException e) {
             log.debug("User {} does not exist", username);
             throw new UsernameNotFoundException("Invalid username or password");
         }
 
-        return user;
+        return userAuth;
     }
 }

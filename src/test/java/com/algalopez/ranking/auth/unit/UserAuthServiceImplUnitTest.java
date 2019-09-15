@@ -1,7 +1,7 @@
 package com.algalopez.ranking.auth.unit;
 
-import com.algalopez.ranking.auth.User;
-import com.algalopez.ranking.auth.UserDao;
+import com.algalopez.ranking.auth.UserAuth;
+import com.algalopez.ranking.auth.UserAuthDao;
 import com.algalopez.ranking.auth.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,23 +19,23 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserServiceImplUnitTest {
+public class UserAuthServiceImplUnitTest {
 
     @Mock
-    private UserDao userDao;
+    private UserAuthDao userAuthDao;
 
     private UserServiceImpl userService;
 
     @Before
     public void prepareMocks() {
-        userService = new UserServiceImpl(userDao);
+        userService = new UserServiceImpl(userAuthDao);
     }
 
     @Test
     public void testExistingUser() {
 
         String username = "user";
-        UserDetails mockedUser = User.builder()
+        UserDetails mockedUser = UserAuth.builder()
                 .id(1L)
                 .username(username)
                 .password("dvfndsiofj")
@@ -43,7 +43,7 @@ public class UserServiceImplUnitTest {
                 .locked(false)
                 .authorities(new ArrayList<>())
                 .build();
-        when(userDao.findByUsername(username)).thenReturn(mockedUser);
+        when(userAuthDao.findByUsername(username)).thenReturn(mockedUser);
         UserDetails actualUser = userService.loadUserByUsername(username);
         assertEquals(mockedUser, actualUser);
         assertTrue(actualUser.isCredentialsNonExpired());
@@ -53,7 +53,7 @@ public class UserServiceImplUnitTest {
     @Test(expected = UsernameNotFoundException.class)
     public void testNonExistingUser() {
         String username = "user";
-        when(userDao.findByUsername(username)).thenThrow(new EmptyResultDataAccessException(1));
+        when(userAuthDao.findByUsername(username)).thenThrow(new EmptyResultDataAccessException(1));
         userService.loadUserByUsername(username);
     }
 }

@@ -3,10 +3,6 @@
 *.jar
 *.zip
 
-# Root
-gradlew
-gradlew.bat
-
 # Root folders
 .gradle/
 .idea/
@@ -14,3 +10,5 @@ gradle/
 build/
 out/
 logs/
+
+# Root

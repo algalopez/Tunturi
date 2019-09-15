@@ -1,3 +1,3 @@
 #!/bin/sh
 
-mysql -u user -ppass < DML/PopulateTestUsers.sql
+mysql -u userAuth -ppass < DML/PopulateTestUsers.sql

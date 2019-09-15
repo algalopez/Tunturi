@@ -1,7 +1,7 @@
 package com.algalopez.ranking.auth.unit;
 
 import com.algalopez.ranking.auth.AuthenticationServiceImpl;
-import com.algalopez.ranking.auth.User;
+import com.algalopez.ranking.auth.UserAuth;
 import com.algalopez.ranking.auth.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -93,12 +93,12 @@ public class AuthenticationServiceImplUnitTest {
 
         final String username = "user";
         final String password = "pass";
-        User user = buildUser(1L, username, password + "_diff", true, false, "USER");
+        UserAuth userAuth = buildUser(1L, username, password + "_diff", true, false, "USER");
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(username);
         when(authentication.getCredentials()).thenReturn(password);
-        when(userService.loadUserByUsername(username)).thenReturn(user);
+        when(userService.loadUserByUsername(username)).thenReturn(userAuth);
 
         authenticationService.authenticate(authentication);
 
@@ -109,12 +109,12 @@ public class AuthenticationServiceImplUnitTest {
 
         final String username = "user";
         final String password = "pass";
-        User user = buildUser(2L, username, password, false, false, "USER");
+        UserAuth userAuth = buildUser(2L, username, password, false, false, "USER");
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(username);
         when(authentication.getCredentials()).thenReturn(password);
-        when(userService.loadUserByUsername(username)).thenReturn(user);
+        when(userService.loadUserByUsername(username)).thenReturn(userAuth);
 
         authenticationService.authenticate(authentication);
     }
@@ -124,12 +124,12 @@ public class AuthenticationServiceImplUnitTest {
 
         final String username = "user";
         final String password = "pass";
-        User user = buildUser(3L, username, password, true, true, "USER");
+        UserAuth userAuth = buildUser(3L, username, password, true, true, "USER");
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(username);
         when(authentication.getCredentials()).thenReturn(password);
-        when(userService.loadUserByUsername(username)).thenReturn(user);
+        when(userService.loadUserByUsername(username)).thenReturn(userAuth);
 
         authenticationService.authenticate(authentication);
     }
@@ -139,29 +139,29 @@ public class AuthenticationServiceImplUnitTest {
 
         final String username = "admin";
         final String password = "admin";
-        User user = buildUser(4L, username, password, true, false, "ADMIN");
+        UserAuth userAuth = buildUser(4L, username, password, true, false, "ADMIN");
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(username);
         when(authentication.getCredentials()).thenReturn(password);
-        when(userService.loadUserByUsername(username)).thenReturn(user);
+        when(userService.loadUserByUsername(username)).thenReturn(userAuth);
 
         Authentication actualAuthentication = authenticationService.authenticate(authentication);
         assertEquals(username, actualAuthentication.getName());
         assertEquals(password, actualAuthentication.getCredentials());
-        assertEquals(user.getAuthorities(), actualAuthentication.getAuthorities());
+        assertEquals(userAuth.getAuthorities(), actualAuthentication.getAuthorities());
     }
 
     @Test
     public void testCorrectSupport() {
         final String username = "admin";
         final String password = "admin";
-        User user = buildUser(4L, username, password, true, false, "ADMIN");
+        UserAuth userAuth = buildUser(4L, username, password, true, false, "ADMIN");
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn(username);
         when(authentication.getCredentials()).thenReturn(password);
-        when(userService.loadUserByUsername(username)).thenReturn(user);
+        when(userService.loadUserByUsername(username)).thenReturn(userAuth);
 
         Authentication actualAuthentication = authenticationService.authenticate(authentication);
         assertTrue(authenticationService.supports(actualAuthentication.getClass()));
@@ -174,8 +174,8 @@ public class AuthenticationServiceImplUnitTest {
         assertFalse(authenticationService.supports(AnonymousAuthenticationToken.class));
     }
 
-    private User buildUser(Long id, String username, String password, Boolean enabled, Boolean locked, String role) {
-        return User.builder()
+    private UserAuth buildUser(Long id, String username, String password, Boolean enabled, Boolean locked, String role) {
+        return UserAuth.builder()
                 .id(id)
                 .username(username)
                 .password(password)

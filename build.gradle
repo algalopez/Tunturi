@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
     id "org.sonarqube" version "2.7"
     id 'jacoco'
     id 'io.franzbecker.gradle-lombok' version '3.0.0'
@@ -64,15 +64,15 @@ task copyArtifacts(type: Copy) {
     group 'Ranking'
     from 'build/libs/'
     include 'Ranking-*.jar'
-    into "deliver/"
+    into "artifact/"
 }
 
 task zipArtifacts(type: Zip, dependsOn: ['copyArtifacts']) {
     group 'Ranking'
     archiveName = "Ranking.zip"
 
-    from "deliver/"
+    from "artifact/"
     exclude '*.zip'
     exclude '.gitkeep'
-    destinationDir = file('deliver')
+    destinationDir = file('artifact')
 }
