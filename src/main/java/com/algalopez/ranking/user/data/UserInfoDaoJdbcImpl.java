@@ -1,11 +1,12 @@
-package com.algalopez.ranking.user;
+package com.algalopez.ranking.user.data;
 
+import com.algalopez.ranking.user.UserInfoDao;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserDaoJdbcImpl implements UserDao {
+public class UserInfoDaoJdbcImpl implements UserInfoDao {
 
     private static final String ID_PARAM = "id";
     private static final String USERNAME_PARAM = "username";
@@ -14,15 +15,15 @@ public class UserDaoJdbcImpl implements UserDao {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public UserDaoJdbcImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public UserInfoDaoJdbcImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
-    public User findUserById(Long id) {
+    public UserInfo findUserById(Long id) {
         final String selectSql = "SELECT * FROM `user` WHERE id = :" + ID_PARAM + "";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource(ID_PARAM, id);
-        return namedParameterJdbcTemplate.queryForObject(selectSql, mapSqlParameterSource, new UserRowMapper());
+        return namedParameterJdbcTemplate.queryForObject(selectSql, mapSqlParameterSource, new UserInfoRowMapper());
     }
 
     @Override
@@ -39,16 +40,16 @@ public class UserDaoJdbcImpl implements UserDao {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(UserInfo userInfo) {
         final String updateSql = "UPDATE `user` " +
                 "SET username = :" + USERNAME_PARAM + ", email = :" + EMAIL_PARAM + ", level = :" + LEVEL_PARAM + " " +
                 "WHERE id = :" + ID_PARAM + ";";
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-                .addValue(ID_PARAM, user.getId())
-                .addValue(EMAIL_PARAM, user.getEmail())
-                .addValue(USERNAME_PARAM, user.getUsername())
-                .addValue(LEVEL_PARAM, user.getLevel().getLevelValue());
+                .addValue(ID_PARAM, userInfo.getId())
+                .addValue(EMAIL_PARAM, userInfo.getEmail())
+                .addValue(USERNAME_PARAM, userInfo.getUsername())
+                .addValue(LEVEL_PARAM, userInfo.getLevel().getLevelValue());
         namedParameterJdbcTemplate.update(updateSql, mapSqlParameterSource);
     }
 }

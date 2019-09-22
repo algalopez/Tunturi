@@ -1,4 +1,4 @@
-package com.algalopez.ranking.user;
+package com.algalopez.ranking.user.data;
 
 import lombok.*;
 
@@ -6,10 +6,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class User {
+public class UserInfo {
 
     private Long id;
     private String email;
     private String username;
-    private UserLevel level;
+    private UserInfoLevel level;
 }

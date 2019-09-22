@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class AuthenticationServiceImpl implements AuthenticationProvider {
+public class AuthProviderImpl implements AuthenticationProvider {
 
     private static final String INVALID_USERNAME_OR_CREDENTIALS = "Invalid username or password";
     private static final String LOCKED_ACCOUNT = "This account has been locked. If this is an error, please contact the admin";
     private static final String DISABLED_ACCOUNT = "This account has been disabled. If this is an error, please contact the admin";
 
-    private UserServiceImpl userService;
+    private AuthServiceImpl userService;
 
-    public AuthenticationServiceImpl(@Autowired UserServiceImpl userService) {
+    public AuthProviderImpl(@Autowired AuthServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -35,29 +35,29 @@ public class AuthenticationServiceImpl implements AuthenticationProvider {
             return null;
         }
 
-        UserAuth userAuth;
+        Auth auth;
         try {
-            userAuth = (UserAuth) this.userService.loadUserByUsername(providedUsername);
+            auth = (Auth) this.userService.loadUserByUsername(providedUsername);
         } catch (UsernameNotFoundException e) {
             throw new BadCredentialsException(INVALID_USERNAME_OR_CREDENTIALS);
         }
 
-        if (!providedPassword.equals(userAuth.getPassword())) {
+        if (!providedPassword.equals(auth.getPassword())) {
             throw new BadCredentialsException(INVALID_USERNAME_OR_CREDENTIALS);
         }
 
-        if (!userAuth.isEnabled()) {
+        if (!auth.isEnabled()) {
             throw new DisabledException(DISABLED_ACCOUNT);
         }
 
-        if (userAuth.isLocked()) {
+        if (auth.isLocked()) {
             throw new LockedException(LOCKED_ACCOUNT);
         }
 
         return new UsernamePasswordAuthenticationToken(
-                userAuth.getUsername(),
-                userAuth.getPassword(),
-                userAuth.getAuthorities());
+                auth.getUsername(),
+                auth.getPassword(),
+                auth.getAuthorities());
     }
 
     @Override

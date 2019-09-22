@@ -1,8 +1,8 @@
 package com.algalopez.ranking.auth.unit;
 
-import com.algalopez.ranking.auth.UserAuth;
-import com.algalopez.ranking.auth.UserAuthDao;
-import com.algalopez.ranking.auth.UserServiceImpl;
+import com.algalopez.ranking.auth.Auth;
+import com.algalopez.ranking.auth.AuthDao;
+import com.algalopez.ranking.auth.AuthServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,23 +19,23 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserAuthServiceImplUnitTest {
+public class AuthServiceImplUnitTest {
 
     @Mock
-    private UserAuthDao userAuthDao;
+    private AuthDao authDao;
 
-    private UserServiceImpl userService;
+    private AuthServiceImpl userService;
 
     @Before
     public void prepareMocks() {
-        userService = new UserServiceImpl(userAuthDao);
+        userService = new AuthServiceImpl(authDao);
     }
 
     @Test
     public void testExistingUser() {
 
         String username = "user";
-        UserDetails mockedUser = UserAuth.builder()
+        UserDetails mockedUser = Auth.builder()
                 .id(1L)
                 .username(username)
                 .password("dvfndsiofj")
@@ -43,7 +43,7 @@ public class UserAuthServiceImplUnitTest {
                 .locked(false)
                 .authorities(new ArrayList<>())
                 .build();
-        when(userAuthDao.findByUsername(username)).thenReturn(mockedUser);
+        when(authDao.findUserByUsername(username)).thenReturn(mockedUser);
         UserDetails actualUser = userService.loadUserByUsername(username);
         assertEquals(mockedUser, actualUser);
         assertTrue(actualUser.isCredentialsNonExpired());
@@ -53,7 +53,7 @@ public class UserAuthServiceImplUnitTest {
     @Test(expected = UsernameNotFoundException.class)
     public void testNonExistingUser() {
         String username = "user";
-        when(userAuthDao.findByUsername(username)).thenThrow(new EmptyResultDataAccessException(1));
+        when(authDao.findUserByUsername(username)).thenThrow(new EmptyResultDataAccessException(1));
         userService.loadUserByUsername(username);
     }
 }

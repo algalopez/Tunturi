@@ -1,9 +1,9 @@
-package com.algalopez.ranking.user.integration;
+package com.algalopez.ranking.user.integration.data;
 
 import com.algalopez.ranking.RankingApplication;
-import com.algalopez.ranking.user.User;
-import com.algalopez.ranking.user.UserDao;
-import com.algalopez.ranking.user.UserLevel;
+import com.algalopez.ranking.user.data.UserInfo;
+import com.algalopez.ranking.user.UserInfoDao;
+import com.algalopez.ranking.user.data.UserInfoLevel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +23,10 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(classes = RankingApplication.class)
 @TestPropertySource(locations = "classpath:test.properties")
 @Transactional
-public class UserDaoIntegrationTest {
+public class UserInfoDaoIntegrationTest {
 
     @Autowired
-    private UserDao userDao;
+    private UserInfoDao userInfoDao;
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -34,41 +34,41 @@ public class UserDaoIntegrationTest {
     @Test
     public void testFindUserById() {
         final Long id = 1L;
-        User expectedUser = buildUser(id, "email", "username", UserLevel.BEGINNER);
-        insertUser(expectedUser);
+        UserInfo expectedUserInfo = buildUser(id, "email", "username", UserInfoLevel.BEGINNER);
+        insertUser(expectedUserInfo);
 
-        assertEquals(expectedUser, userDao.findUserById(id));
+        assertEquals(expectedUserInfo, userInfoDao.findUserById(id));
     }
 
     @Test
     public void testFindUserWithNullLevel() {
         final Long id = 1L;
-        User expectedUser = buildUser(id, "email", "email", null);
-        insertUser(expectedUser);
+        UserInfo expectedUserInfo = buildUser(id, "email", "email", null);
+        insertUser(expectedUserInfo);
 
-        assertEquals(expectedUser, userDao.findUserById(id));
+        assertEquals(expectedUserInfo, userInfoDao.findUserById(id));
     }
 
     @Test
     public void testUserCreation() {
         final Long id = 1L;
         final String email = "email";
-        userDao.createUser(id, email);
-        User expectedUser = buildUser(id, email, email, null);
-        assertEquals(expectedUser, getUserList().get(0));
+        userInfoDao.createUser(id, email);
+        UserInfo expectedUserInfo = buildUser(id, email, email, null);
+        assertEquals(expectedUserInfo, getUserList().get(0));
     }
 
     @Test
     public void testUpdateUser() {
-        userDao.createUser(2L, "email2");
-        User expectedUser = buildUser(2L, "email1", "username", UserLevel.BEGINNER);
-        userDao.updateUser(expectedUser);
+        userInfoDao.createUser(2L, "email2");
+        UserInfo expectedUserInfo = buildUser(2L, "email1", "username", UserInfoLevel.BEGINNER);
+        userInfoDao.updateUser(expectedUserInfo);
 
-        assertEquals(expectedUser, getUserList().get(0));
+        assertEquals(expectedUserInfo, getUserList().get(0));
     }
 
-    private User buildUser(Long id, String email, String username, UserLevel level) {
-        return User.builder()
+    private UserInfo buildUser(Long id, String email, String username, UserInfoLevel level) {
+        return UserInfo.builder()
                 .id(id)
                 .email(email)
                 .username(username)
@@ -76,18 +76,18 @@ public class UserDaoIntegrationTest {
                 .build();
     }
 
-    private List<User> getUserList() {
+    private List<UserInfo> getUserList() {
         final String queryUser = "SELECT id, email, username, level FROM `user` ORDER BY id ASC";
-        return namedParameterJdbcTemplate.query(queryUser, new MapSqlParameterSource(), new BeanPropertyRowMapper<>(User.class));
+        return namedParameterJdbcTemplate.query(queryUser, new MapSqlParameterSource(), new BeanPropertyRowMapper<>(UserInfo.class));
     }
 
-    private void insertUser(User user) {
-        Integer levelValue = user.getLevel() == null ? null : user.getLevel().getLevelValue();
+    private void insertUser(UserInfo userInfo) {
+        Integer levelValue = userInfo.getLevel() == null ? null : userInfo.getLevel().getLevelValue();
         final String insertUser = "INSERT INTO `user` (id, email, username, level) VALUES (:id, :email, :username, :level)";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-                .addValue("id", user.getId())
-                .addValue("email", user.getEmail())
-                .addValue("username", user.getUsername())
+                .addValue("id", userInfo.getId())
+                .addValue("email", userInfo.getEmail())
+                .addValue("username", userInfo.getUsername())
                 .addValue("level", levelValue);
         namedParameterJdbcTemplate.update(insertUser, mapSqlParameterSource);
     }

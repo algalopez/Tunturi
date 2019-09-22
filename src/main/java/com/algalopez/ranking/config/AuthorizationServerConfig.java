@@ -1,7 +1,7 @@
 package com.algalopez.ranking.config;
 
 
-import com.algalopez.ranking.auth.UserServiceImpl;
+import com.algalopez.ranking.auth.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,7 +32,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private TokenStore tokenStore;
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private AuthServiceImpl authServiceImpl;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {

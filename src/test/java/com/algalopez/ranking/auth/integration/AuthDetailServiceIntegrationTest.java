@@ -1,7 +1,7 @@
 package com.algalopez.ranking.auth.integration;
 
 import com.algalopez.ranking.RankingApplication;
-import com.algalopez.ranking.auth.UserAuth;
+import com.algalopez.ranking.auth.Auth;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(classes = RankingApplication.class)
 @TestPropertySource(locations = "classpath:test.properties")
 @Transactional
-public class UserAuthDetailServiceIntegrationTest {
+public class AuthDetailServiceIntegrationTest {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -39,19 +39,19 @@ public class UserAuthDetailServiceIntegrationTest {
 
         Long userId;
 
-        UserAuth expectedUserAuth1 = buildUser("user1", "pass1", false, false, "USER");
-        userId = insertUser(expectedUserAuth1);
-        expectedUserAuth1.setId(userId);
+        Auth expectedAuth1 = buildUser("user1", "pass1", false, false, "USER");
+        userId = insertUser(expectedAuth1);
+        expectedAuth1.setId(userId);
 
-        UserAuth expectedUserAuth2 = buildUser("user2", "pass2", true, true, "ADMIN");
-        userId = insertUser(expectedUserAuth2);
-        expectedUserAuth2.setId(userId);
+        Auth expectedAuth2 = buildUser("user2", "pass2", true, true, "ADMIN");
+        userId = insertUser(expectedAuth2);
+        expectedAuth2.setId(userId);
 
-        UserAuth actualUserAuth1 = (UserAuth) userDetailsService.loadUserByUsername(expectedUserAuth1.getUsername());
-        UserAuth actualUserAuth2 = (UserAuth) userDetailsService.loadUserByUsername(expectedUserAuth2.getUsername());
+        Auth actualAuth1 = (Auth) userDetailsService.loadUserByUsername(expectedAuth1.getUsername());
+        Auth actualAuth2 = (Auth) userDetailsService.loadUserByUsername(expectedAuth2.getUsername());
 
-        assertEquals(expectedUserAuth1, actualUserAuth1);
-        assertEquals(expectedUserAuth2, actualUserAuth2);
+        assertEquals(expectedAuth1, actualAuth1);
+        assertEquals(expectedAuth2, actualAuth2);
     }
 
     @Test(expected = UsernameNotFoundException.class)
@@ -59,25 +59,25 @@ public class UserAuthDetailServiceIntegrationTest {
         userDetailsService.loadUserByUsername("NonExistingUser");
     }
 
-    private Long insertUser(UserAuth userAuth) {
+    private Long insertUser(Auth auth) {
 
         final String insertSql = "INSERT INTO `user_auth` (username, password, enabled, locked, role) " +
                 "VALUES (:username, :password, :enabled, :locked, :role)";
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("username", userAuth.getUsername());
-        parameters.put("password", userAuth.getPassword());
-        parameters.put("enabled", userAuth.isEnabled());
-        parameters.put("locked", !userAuth.isAccountNonLocked());
-        parameters.put("role", userAuth.getAuthorities().get(0).getAuthority());
+        parameters.put("username", auth.getUsername());
+        parameters.put("password", auth.getPassword());
+        parameters.put("enabled", auth.isEnabled());
+        parameters.put("locked", !auth.isAccountNonLocked());
+        parameters.put("role", auth.getAuthorities().get(0).getAuthority());
         namedParameterJdbcTemplate.update(insertSql, parameters);
 
         final String queryUser = "SELECT id FROM `user_auth` WHERE username=:username";
-        SqlParameterSource queryParams = new MapSqlParameterSource("username", userAuth.getUsername());
+        SqlParameterSource queryParams = new MapSqlParameterSource("username", auth.getUsername());
         return namedParameterJdbcTemplate.queryForObject(queryUser, queryParams, Long.class);
     }
 
-    private UserAuth buildUser(String username, String password, Boolean enabled, Boolean locked, String role) {
-        return UserAuth.builder()
+    private Auth buildUser(String username, String password, Boolean enabled, Boolean locked, String role) {
+        return Auth.builder()
                 .username(username)
                 .password(password)
                 .enabled(enabled)

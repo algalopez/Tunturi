@@ -10,16 +10,17 @@ import org.springframework.stereotype.Service;
 
 @Service("userDetailsService")
 @Slf4j
-public class UserServiceImpl implements UserDetailsService {
+public class AuthServiceImpl implements UserDetailsService {
 
-    private UserAuthDao userAuthDao;
+    private AuthDao authDao;
 
-    public UserServiceImpl(@Autowired UserAuthDao userAuthDao) {
-        this.userAuthDao = userAuthDao;
+    public AuthServiceImpl(@Autowired AuthDao authDao) {
+        this.authDao = authDao;
     }
 
     /**
-     * Determine which user is logged in, asuming that every user has a unique username.
+     * Determine which user is logged in, assuming that every user has a unique username.
+     *
      * @param username unique username
      * @return user principal
      * @throws UsernameNotFoundException if user does not exist
@@ -27,14 +28,14 @@ public class UserServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
 
-        UserAuth userAuth;
+        Auth auth;
         try {
-            userAuth = (UserAuth) userAuthDao.findByUsername(username);
+            auth = (Auth) authDao.findUserByUsername(username);
         } catch (EmptyResultDataAccessException e) {
             log.debug("User {} does not exist", username);
             throw new UsernameNotFoundException("Invalid username or password");
         }
 
-        return userAuth;
+        return auth;
     }
 }

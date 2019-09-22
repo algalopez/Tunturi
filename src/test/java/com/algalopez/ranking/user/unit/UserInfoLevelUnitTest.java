@@ -1,6 +1,6 @@
 package com.algalopez.ranking.user.unit;
 
-import com.algalopez.ranking.user.UserLevel;
+import com.algalopez.ranking.user.data.UserInfoLevel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserLevelUnitTest {
+public class UserInfoLevelUnitTest {
 
     private static final int LEVEL_UNDEFINED = 0;
     private static final int LEVEL_BEGINNER = 1;
@@ -18,9 +18,9 @@ public class UserLevelUnitTest {
     @Test
     public void testParseUserLevel() {
 
-        assertEquals(UserLevel.UNDEFINED, UserLevel.parseUserLevel(LEVEL_UNDEFINED));
-        assertEquals(UserLevel.BEGINNER, UserLevel.parseUserLevel(LEVEL_BEGINNER));
-        assertEquals(UserLevel.EXPERT, UserLevel.parseUserLevel(LEVEL_EXPERT));
-        assertNull(UserLevel.parseUserLevel(null));
+        assertEquals(UserInfoLevel.UNDEFINED, UserInfoLevel.parseUserLevel(LEVEL_UNDEFINED));
+        assertEquals(UserInfoLevel.BEGINNER, UserInfoLevel.parseUserLevel(LEVEL_BEGINNER));
+        assertEquals(UserInfoLevel.EXPERT, UserInfoLevel.parseUserLevel(LEVEL_EXPERT));
+        assertNull(UserInfoLevel.parseUserLevel(null));
     }
 }

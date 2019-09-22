@@ -1,6 +1,6 @@
 package com.algalopez.ranking.config;
 
-import com.algalopez.ranking.auth.UserServiceImpl;
+import com.algalopez.ranking.auth.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private AuthServiceImpl authServiceImpl;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userServiceImpl)
+                .userDetailsService(authServiceImpl)
                 .passwordEncoder(passwordEncoder);
     }
 }

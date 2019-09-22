@@ -1,24 +1,20 @@
-package com.algalopez.ranking.auth.integration;
+package com.algalopez.ranking.user.integration.data;
 
 import com.algalopez.ranking.RankingApplication;
-import com.algalopez.ranking.auth.UserAuth;
-import com.algalopez.ranking.auth.UserAuthDao;
-import com.algalopez.ranking.auth.UserAuthRole;
+import com.algalopez.ranking.user.UserAuthDao;
+import com.algalopez.ranking.user.data.UserAuth;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +27,9 @@ import static org.junit.Assert.assertEquals;
 @Transactional
 public class UserAuthDaoIntegrationTest {
 
+    private static final String ROLE_USER = "USER";
+    private static final String ROLE_ADMIN = "ADMIN";
+
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -38,28 +37,33 @@ public class UserAuthDaoIntegrationTest {
     private UserAuthDao userAuthDao;
 
     @Test
-    public void testFindByUsername() {
+    public void testUserAuthCreation() {
 
-        Long userId;
+        Long id1 = userAuthDao.createUserAuth("username1", "password1", ROLE_USER);
+        UserAuth expectedAuth1 = buildUser("username1", "password1", false, false, ROLE_USER);
+        expectedAuth1.setId(id1);
 
-        UserAuth expectedUserAuth1 = buildUser("user1", "pass1", false, false, "USER");
-        userId = insertUser(expectedUserAuth1);
-        expectedUserAuth1.setId(userId);
+        Long id2 = userAuthDao.createUserAuth("username2", "password2", ROLE_ADMIN);
+        UserAuth expectedAuth2 = buildUser("username2", "password2", false, false, ROLE_ADMIN);
+        expectedAuth2.setId(id2);
 
-        UserAuth expectedUserAuth2 = buildUser("user2", "pass2", true, true, "ADMIN");
-        userId = insertUser(expectedUserAuth2);
-        expectedUserAuth2.setId(userId);
-
-        UserAuth actualUserAuth1 = (UserAuth) userAuthDao.findByUsername(expectedUserAuth1.getUsername());
-        UserAuth actualUserAuth2 = (UserAuth) userAuthDao.findByUsername(expectedUserAuth2.getUsername());
-        assertEquals(expectedUserAuth1, actualUserAuth1);
-        assertEquals(expectedUserAuth2, actualUserAuth2);
+        List<UserAuth> authList = getUserAuthList();
+        assertEquals(expectedAuth1, authList.get(0));
+        assertEquals(expectedAuth2, authList.get(1));
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
-    public void testFindNonExistingUserByUsername() {
+    @Test
+    public void testUpdateUserAuth() {
 
-        userAuthDao.findByUsername("non existing user");
+        UserAuth initialAuth = buildUser("user1", "pass1", false, false, ROLE_USER);
+        Long id = insertUser(initialAuth);
+        initialAuth.setId(id);
+        UserAuth expectedAuth = buildUser("user2", "pass2", true, true, ROLE_ADMIN);
+        expectedAuth.setId(id);
+
+        userAuthDao.updateUserAuth(expectedAuth);
+        List<UserAuth> authList = getUserAuthList();
+        assertEquals(expectedAuth, authList.get(0));
     }
 
     private Long insertUser(UserAuth userAuth) {
@@ -70,29 +74,13 @@ public class UserAuthDaoIntegrationTest {
         parameters.put("username", userAuth.getUsername());
         parameters.put("password", userAuth.getPassword());
         parameters.put("enabled", userAuth.isEnabled());
-        parameters.put("locked", !userAuth.isAccountNonLocked());
-        parameters.put("role", userAuth.getAuthorities().get(0).getAuthority());
+        parameters.put("locked", userAuth.isLocked());
+        parameters.put("role", userAuth.getRole());
         namedParameterJdbcTemplate.update(insertSql, parameters);
 
         final String queryUser = "SELECT id FROM `user_auth` WHERE username=:username";
         SqlParameterSource queryParams = new MapSqlParameterSource("username", userAuth.getUsername());
         return namedParameterJdbcTemplate.queryForObject(queryUser, queryParams, Long.class);
-    }
-
-    @Test
-    public void testUserAuthCreation() {
-
-        Long id1 = userAuthDao.createUserAuth("username1", "password1", UserAuthRole.USER);
-        UserAuth expectedUserAuth1 = buildUser("username1", "password1", false, false, UserAuthRole.USER.getValue());
-        expectedUserAuth1.setId(id1);
-
-        Long id2 = userAuthDao.createUserAuth("username2", "password2", UserAuthRole.ADMIN);
-        UserAuth expectedUserAuth2 = buildUser("username2", "password2", false, false, UserAuthRole.ADMIN.getValue());
-        expectedUserAuth2.setId(id2);
-
-        List<UserAuth> userAuthAuthList = getUserAuthList();
-        assertEquals(expectedUserAuth1, userAuthAuthList.get(0));
-        assertEquals(expectedUserAuth2, userAuthAuthList.get(1));
     }
 
     private UserAuth buildUser(String username, String password, Boolean enabled, Boolean locked, String role) {
@@ -102,13 +90,13 @@ public class UserAuthDaoIntegrationTest {
                 .password(password)
                 .enabled(enabled)
                 .locked(locked)
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority(role)))
+                .role(role)
                 .build();
     }
 
     private List<UserAuth> getUserAuthList() {
 
-        final String queryUser = "SELECT id, username, password, enabled, locked, role AS authorities FROM `user_auth` ORDER BY id ASC";
+        final String queryUser = "SELECT id, username, password, enabled, locked, role FROM `user_auth` ORDER BY id ASC";
         return namedParameterJdbcTemplate.query(queryUser, new MapSqlParameterSource(), new BeanPropertyRowMapper<>(UserAuth.class));
     }
 }

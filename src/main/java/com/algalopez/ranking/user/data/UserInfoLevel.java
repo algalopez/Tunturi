@@ -1,8 +1,8 @@
-package com.algalopez.ranking.user;
+package com.algalopez.ranking.user.data;
 
 import java.util.Arrays;
 
-public enum UserLevel {
+public enum UserInfoLevel {
 
     UNDEFINED(0),
     BEGINNER(1),
@@ -10,17 +10,17 @@ public enum UserLevel {
 
     private Integer levelValue;
 
-    UserLevel(Integer levelValue) {
+    UserInfoLevel(Integer levelValue) {
         this.levelValue = levelValue;
     }
 
-    public static UserLevel parseUserLevel(Integer levelValue) {
+    public static UserInfoLevel parseUserLevel(Integer levelValue) {
 
         if (levelValue == null) {
             return null;
         }
 
-        return Arrays.stream(UserLevel.values())
+        return Arrays.stream(UserInfoLevel.values())
                 .filter(e -> e.levelValue.equals(levelValue))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
