@@ -1,7 +1,7 @@
 package com.algalopez.ranking.user.integration.data;
 
 import com.algalopez.ranking.RankingApplication;
-import com.algalopez.ranking.user.UserAuthDao;
+import com.algalopez.ranking.user.data.UserAuthDao;
 import com.algalopez.ranking.user.data.UserAuth;
 import org.junit.Test;
 import org.junit.runner.RunWith;

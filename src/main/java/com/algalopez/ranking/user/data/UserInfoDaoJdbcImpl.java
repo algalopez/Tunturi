@@ -1,6 +1,5 @@
 package com.algalopez.ranking.user.data;
 
-import com.algalopez.ranking.user.UserInfoDao;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,14 +19,14 @@ public class UserInfoDaoJdbcImpl implements UserInfoDao {
     }
 
     @Override
-    public UserInfo findUserById(Long id) {
+    public UserInfo findUserInfoById(Long id) {
         final String selectSql = "SELECT * FROM `user` WHERE id = :" + ID_PARAM + "";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource(ID_PARAM, id);
         return namedParameterJdbcTemplate.queryForObject(selectSql, mapSqlParameterSource, new UserInfoRowMapper());
     }
 
     @Override
-    public Long createUser(Long id, String email) {
+    public Long createUserInfo(Long id, String email) {
         final String insertSql = "INSERT INTO `user` (id, email, username, level) VALUES " +
                 "(:" + ID_PARAM + ", :" + EMAIL_PARAM + ", :" + USERNAME_PARAM + ", :" + LEVEL_PARAM + ")";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
@@ -40,7 +39,7 @@ public class UserInfoDaoJdbcImpl implements UserInfoDao {
     }
 
     @Override
-    public void updateUser(UserInfo userInfo) {
+    public void updateUserInfo(UserInfo userInfo) {
         final String updateSql = "UPDATE `user` " +
                 "SET username = :" + USERNAME_PARAM + ", email = :" + EMAIL_PARAM + ", level = :" + LEVEL_PARAM + " " +
                 "WHERE id = :" + ID_PARAM + ";";

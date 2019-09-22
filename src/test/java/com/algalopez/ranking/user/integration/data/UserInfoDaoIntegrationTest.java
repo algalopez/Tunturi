@@ -1,8 +1,8 @@
 package com.algalopez.ranking.user.integration.data;
 
 import com.algalopez.ranking.RankingApplication;
+import com.algalopez.ranking.user.data.UserInfoDao;
 import com.algalopez.ranking.user.data.UserInfo;
-import com.algalopez.ranking.user.UserInfoDao;
 import com.algalopez.ranking.user.data.UserInfoLevel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +37,7 @@ public class UserInfoDaoIntegrationTest {
         UserInfo expectedUserInfo = buildUser(id, "email", "username", UserInfoLevel.BEGINNER);
         insertUser(expectedUserInfo);
 
-        assertEquals(expectedUserInfo, userInfoDao.findUserById(id));
+        assertEquals(expectedUserInfo, userInfoDao.findUserInfoById(id));
     }
 
     @Test
@@ -46,23 +46,23 @@ public class UserInfoDaoIntegrationTest {
         UserInfo expectedUserInfo = buildUser(id, "email", "email", null);
         insertUser(expectedUserInfo);
 
-        assertEquals(expectedUserInfo, userInfoDao.findUserById(id));
+        assertEquals(expectedUserInfo, userInfoDao.findUserInfoById(id));
     }
 
     @Test
     public void testUserCreation() {
         final Long id = 1L;
         final String email = "email";
-        userInfoDao.createUser(id, email);
+        userInfoDao.createUserInfo(id, email);
         UserInfo expectedUserInfo = buildUser(id, email, email, null);
         assertEquals(expectedUserInfo, getUserList().get(0));
     }
 
     @Test
     public void testUpdateUser() {
-        userInfoDao.createUser(2L, "email2");
+        userInfoDao.createUserInfo(2L, "email2");
         UserInfo expectedUserInfo = buildUser(2L, "email1", "username", UserInfoLevel.BEGINNER);
-        userInfoDao.updateUser(expectedUserInfo);
+        userInfoDao.updateUserInfo(expectedUserInfo);
 
         assertEquals(expectedUserInfo, getUserList().get(0));
     }

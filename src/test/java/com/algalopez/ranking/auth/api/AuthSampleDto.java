@@ -1,4 +1,4 @@
-package com.algalopez.ranking.sample;
+package com.algalopez.ranking.auth.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SampleDto {
+class AuthSampleDto {
 
-    private Integer id;
     private String sample;
 }

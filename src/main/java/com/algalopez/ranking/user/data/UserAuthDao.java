@@ -1,6 +1,4 @@
-package com.algalopez.ranking.user;
-
-import com.algalopez.ranking.user.data.UserAuth;
+package com.algalopez.ranking.user.data;
 
 public interface UserAuthDao {
 

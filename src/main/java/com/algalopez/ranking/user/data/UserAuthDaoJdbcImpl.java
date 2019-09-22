@@ -1,6 +1,5 @@
 package com.algalopez.ranking.user.data;
 
-import com.algalopez.ranking.user.UserAuthDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
