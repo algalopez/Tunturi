@@ -1,6 +1,7 @@
 package com.algalopez.ranking.user.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -24,15 +25,22 @@ public class UserAuthDaoJdbcImpl implements UserAuthDao {
     }
 
     @Override
-    public Long createUserAuth(String username, String password, String role) {
+    public UserAuth findUserAuthById(Long id) {
+        final String selectSql = "SELECT * FROM `user_auth` WHERE id = :" + ID_PARAM + ";";
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource(ID_PARAM, id);
+        return namedParameterJdbcTemplate.queryForObject(selectSql, mapSqlParameterSource, new BeanPropertyRowMapper<>(UserAuth.class));
+    }
+
+    @Override
+    public Long createUserAuth(UserAuth auth) {
         final String insertSql = "INSERT INTO `user_auth` (username, password, enabled, locked, role) VALUES " +
                 "(:" + USERNAME_PARAM + ", :" + PW_PARAM + ", :" + ENABLED_PARAM + ", :" + LOCKED_PARAM + ", :" + ROLE_PARAM + ")";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-                .addValue(USERNAME_PARAM, username)
-                .addValue(PW_PARAM, password)
-                .addValue(ENABLED_PARAM, false)
-                .addValue(LOCKED_PARAM, false)
-                .addValue(ROLE_PARAM, role);
+                .addValue(USERNAME_PARAM, auth.getUsername())
+                .addValue(PW_PARAM, auth.getPassword())
+                .addValue(ENABLED_PARAM, auth.isEnabled())
+                .addValue(LOCKED_PARAM, auth.isLocked())
+                .addValue(ROLE_PARAM, auth.getRole());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(insertSql, mapSqlParameterSource, keyHolder);
         return keyHolder.getKey().longValue();
@@ -41,7 +49,7 @@ public class UserAuthDaoJdbcImpl implements UserAuthDao {
     @Override
     public void updateUserAuth(UserAuth userAuth) {
         final String updateSql = "UPDATE `user_auth` SET username = :" + USERNAME_PARAM + ", password = :" + PW_PARAM + ", " +
-                "enabled = :" + ENABLED_PARAM + ", locked = :" + LOCKED_PARAM + ", role = :" + ROLE_PARAM + " WHERE id = :id;";
+                "enabled = :" + ENABLED_PARAM + ", locked = :" + LOCKED_PARAM + ", role = :" + ROLE_PARAM + " WHERE id = :" + ID_PARAM + ";";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
                 .addValue(ID_PARAM, userAuth.getId())
                 .addValue(USERNAME_PARAM, userAuth.getUsername())
@@ -49,6 +57,15 @@ public class UserAuthDaoJdbcImpl implements UserAuthDao {
                 .addValue(ENABLED_PARAM, userAuth.isEnabled())
                 .addValue(LOCKED_PARAM, userAuth.isLocked())
                 .addValue(ROLE_PARAM, userAuth.getRole());
+        namedParameterJdbcTemplate.update(updateSql, mapSqlParameterSource);
+    }
+
+    @Override
+    public void patchUserAuthPassword(Long id, String encodedPassword) {
+        final String updateSql = "UPDATE `user_auth` SET password = :" + PW_PARAM + " WHERE id = :" + ID_PARAM + ";";
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
+                .addValue(ID_PARAM, id)
+                .addValue(PW_PARAM, encodedPassword);
         namedParameterJdbcTemplate.update(updateSql, mapSqlParameterSource);
     }
 }

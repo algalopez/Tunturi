@@ -8,7 +8,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -175,13 +178,14 @@ public class AuthProviderImplUnitTest {
     }
 
     private Auth buildUser(Long id, String username, String password, Boolean enabled, Boolean locked, String role) {
-        return Auth.builder()
-                .id(id)
-                .username(username)
-                .password(password)
-                .enabled(enabled)
-                .locked(locked)
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority(role)))
-                .build();
+        return new Auth(id, username, password, enabled, locked, Collections.singletonList(new SimpleGrantedAuthority(role)));
+//        return Auth.builder()
+//                .id(id)
+//                .username(username)
+//                .password(password)
+//                .enabled(enabled)
+//                .locked(locked)
+//                .authorities(Collections.singletonList(new SimpleGrantedAuthority(role)))
+//                .build();
     }
 }

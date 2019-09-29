@@ -1,9 +1,8 @@
 package com.algalopez.ranking.user.integration.data;
 
 import com.algalopez.ranking.RankingApplication;
-import com.algalopez.ranking.user.data.UserInfoDao;
 import com.algalopez.ranking.user.data.UserInfo;
-import com.algalopez.ranking.user.data.UserInfoLevel;
+import com.algalopez.ranking.user.data.UserInfoDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class UserInfoDaoIntegrationTest {
     @Test
     public void testFindUserById() {
         final Long id = 1L;
-        UserInfo expectedUserInfo = buildUser(id, "email", "username", UserInfoLevel.BEGINNER);
+        UserInfo expectedUserInfo = buildUser(id, "email", "username", 1);
         insertUser(expectedUserInfo);
 
         assertEquals(expectedUserInfo, userInfoDao.findUserInfoById(id));
@@ -53,21 +52,27 @@ public class UserInfoDaoIntegrationTest {
     public void testUserCreation() {
         final Long id = 1L;
         final String email = "email";
-        userInfoDao.createUserInfo(id, email);
         UserInfo expectedUserInfo = buildUser(id, email, email, null);
+        userInfoDao.createUserInfo(expectedUserInfo);
         assertEquals(expectedUserInfo, getUserList().get(0));
     }
 
     @Test
     public void testUpdateUser() {
-        userInfoDao.createUserInfo(2L, "email2");
-        UserInfo expectedUserInfo = buildUser(2L, "email1", "username", UserInfoLevel.BEGINNER);
-        userInfoDao.updateUserInfo(expectedUserInfo);
+        UserInfo initialUserInfo = buildUser(2L, "email1", "username1", 0);
+        UserInfo finalUserInfo = buildUser(2L, "email2", "username2", 1);
 
-        assertEquals(expectedUserInfo, getUserList().get(0));
+        userInfoDao.createUserInfo(initialUserInfo);
+        userInfoDao.updateUserInfo(finalUserInfo);
+
+        assertEquals(initialUserInfo.getId(), getUserList().get(0).getId());
+        assertEquals(finalUserInfo.getUsername(), getUserList().get(0).getUsername());
+        assertEquals(finalUserInfo.getEmail(), getUserList().get(0).getEmail());
+        assertEquals(finalUserInfo.getLevel(), getUserList().get(0).getLevel());
+
     }
 
-    private UserInfo buildUser(Long id, String email, String username, UserInfoLevel level) {
+    private UserInfo buildUser(Long id, String email, String username, Integer level) {
         return UserInfo.builder()
                 .id(id)
                 .email(email)
@@ -82,13 +87,12 @@ public class UserInfoDaoIntegrationTest {
     }
 
     private void insertUser(UserInfo userInfo) {
-        Integer levelValue = userInfo.getLevel() == null ? null : userInfo.getLevel().getLevelValue();
         final String insertUser = "INSERT INTO `user` (id, email, username, level) VALUES (:id, :email, :username, :level)";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
                 .addValue("id", userInfo.getId())
                 .addValue("email", userInfo.getEmail())
                 .addValue("username", userInfo.getUsername())
-                .addValue("level", levelValue);
+                .addValue("level", userInfo.getLevel());
         namedParameterJdbcTemplate.update(insertUser, mapSqlParameterSource);
     }
 }

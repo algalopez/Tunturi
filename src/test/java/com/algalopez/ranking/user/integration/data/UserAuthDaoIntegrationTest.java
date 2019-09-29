@@ -37,19 +37,28 @@ public class UserAuthDaoIntegrationTest {
     private UserAuthDao userAuthDao;
 
     @Test
+    public void testFindUserById() {
+        UserAuth expectedUserAuth = buildUser("user1", "pass1", false, false, ROLE_USER);
+        Long id = insertUser(expectedUserAuth);
+        expectedUserAuth.setId(id);
+
+        assertEquals(expectedUserAuth, userAuthDao.findUserAuthById(id));
+    }
+
+    @Test
     public void testUserAuthCreation() {
 
-        Long id1 = userAuthDao.createUserAuth("username1", "password1", ROLE_USER);
-        UserAuth expectedAuth1 = buildUser("username1", "password1", false, false, ROLE_USER);
-        expectedAuth1.setId(id1);
+        UserAuth expectedUserAuth1 = buildUser("username1", "password1", false, false, ROLE_USER);
+        Long id1 = userAuthDao.createUserAuth(expectedUserAuth1);
+        expectedUserAuth1.setId(id1);
 
-        Long id2 = userAuthDao.createUserAuth("username2", "password2", ROLE_ADMIN);
-        UserAuth expectedAuth2 = buildUser("username2", "password2", false, false, ROLE_ADMIN);
-        expectedAuth2.setId(id2);
+        UserAuth expectedUserAuth2 = buildUser("username2", "password2", false, false, ROLE_ADMIN);
+        Long id2 = userAuthDao.createUserAuth(expectedUserAuth2);
+        expectedUserAuth2.setId(id2);
 
         List<UserAuth> authList = getUserAuthList();
-        assertEquals(expectedAuth1, authList.get(0));
-        assertEquals(expectedAuth2, authList.get(1));
+        assertEquals(expectedUserAuth1, authList.get(0));
+        assertEquals(expectedUserAuth2, authList.get(1));
     }
 
     @Test

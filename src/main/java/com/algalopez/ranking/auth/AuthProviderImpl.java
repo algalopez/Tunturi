@@ -35,29 +35,29 @@ public class AuthProviderImpl implements AuthenticationProvider {
             return null;
         }
 
-        Auth auth;
+        Auth principal;
         try {
-            auth = (Auth) this.userService.loadUserByUsername(providedUsername);
+            principal = this.userService.loadUserByUsername(providedUsername);
         } catch (UsernameNotFoundException e) {
             throw new BadCredentialsException(INVALID_USERNAME_OR_CREDENTIALS);
         }
 
-        if (!providedPassword.equals(auth.getPassword())) {
+        if (!providedPassword.equals(principal.getPassword())) {
             throw new BadCredentialsException(INVALID_USERNAME_OR_CREDENTIALS);
         }
 
-        if (!auth.isEnabled()) {
+        if (!principal.isEnabled()) {
             throw new DisabledException(DISABLED_ACCOUNT);
         }
 
-        if (auth.isLocked()) {
+        if (!principal.isAccountNonLocked()) {
             throw new LockedException(LOCKED_ACCOUNT);
         }
 
         return new UsernamePasswordAuthenticationToken(
-                auth.getUsername(),
-                auth.getPassword(),
-                auth.getAuthorities());
+                principal,
+                principal.getPassword(),
+                principal.getAuthorities());
     }
 
     @Override

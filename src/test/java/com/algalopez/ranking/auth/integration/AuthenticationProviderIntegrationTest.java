@@ -93,7 +93,8 @@ public class AuthenticationProviderIntegrationTest {
         parameters.put("password", auth.getPassword());
         parameters.put("enabled", auth.isEnabled());
         parameters.put("locked", !auth.isAccountNonLocked());
-        parameters.put("role", auth.getAuthorities().get(0).getAuthority());
+        parameters.put("role", auth.getAuthorities().iterator().next().getAuthority());
+//        parameters.put("role", auth.getAuthorities().get(0).getAuthority());
         namedParameterJdbcTemplate.update(insertSql, parameters);
 
         final String queryUser = "SELECT id FROM `user_auth` WHERE username=:username";
@@ -102,12 +103,14 @@ public class AuthenticationProviderIntegrationTest {
     }
 
     private Auth buildUser(String username, String password, Boolean enabled, Boolean locked, String role) {
-        return Auth.builder()
-                .username(username)
-                .password(password)
-                .enabled(enabled)
-                .locked(locked)
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority(role)))
-                .build();
+        return new Auth(null, username, password, enabled, locked, Collections.singletonList(new SimpleGrantedAuthority(role)));
+
+//        return Auth.builder()
+//                .username(username)
+//                .password(password)
+//                .enabled(enabled)
+//                .locked(locked)
+//                .authorities(Collections.singletonList(new SimpleGrantedAuthority(role)))
+//                .build();
     }
 }

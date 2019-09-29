@@ -1,5 +1,6 @@
 package com.algalopez.ranking.user.data;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,22 +21,22 @@ public class UserInfoDaoJdbcImpl implements UserInfoDao {
 
     @Override
     public UserInfo findUserInfoById(Long id) {
-        final String selectSql = "SELECT * FROM `user` WHERE id = :" + ID_PARAM + "";
+        final String selectSql = "SELECT * FROM `user` WHERE id = :" + ID_PARAM + ";";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource(ID_PARAM, id);
-        return namedParameterJdbcTemplate.queryForObject(selectSql, mapSqlParameterSource, new UserInfoRowMapper());
+        return namedParameterJdbcTemplate.queryForObject(selectSql, mapSqlParameterSource, new BeanPropertyRowMapper<>(UserInfo.class));
     }
 
     @Override
-    public Long createUserInfo(Long id, String email) {
+    public Long createUserInfo(UserInfo userInfo) {
         final String insertSql = "INSERT INTO `user` (id, email, username, level) VALUES " +
-                "(:" + ID_PARAM + ", :" + EMAIL_PARAM + ", :" + USERNAME_PARAM + ", :" + LEVEL_PARAM + ")";
+                "(:" + ID_PARAM + ", :" + EMAIL_PARAM + ", :" + USERNAME_PARAM + ", :" + LEVEL_PARAM + ");";
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
-                .addValue(ID_PARAM, id)
-                .addValue(EMAIL_PARAM, email)
-                .addValue(USERNAME_PARAM, email)
-                .addValue(LEVEL_PARAM, null);
+                .addValue(ID_PARAM, userInfo.getId())
+                .addValue(EMAIL_PARAM, userInfo.getEmail())
+                .addValue(USERNAME_PARAM, userInfo.getUsername())
+                .addValue(LEVEL_PARAM, userInfo.getLevel());
         namedParameterJdbcTemplate.update(insertSql, mapSqlParameterSource);
-        return id;
+        return userInfo.getId();
     }
 
     @Override
@@ -48,7 +49,7 @@ public class UserInfoDaoJdbcImpl implements UserInfoDao {
                 .addValue(ID_PARAM, userInfo.getId())
                 .addValue(EMAIL_PARAM, userInfo.getEmail())
                 .addValue(USERNAME_PARAM, userInfo.getUsername())
-                .addValue(LEVEL_PARAM, userInfo.getLevel().getLevelValue());
+                .addValue(LEVEL_PARAM, userInfo.getLevel());
         namedParameterJdbcTemplate.update(updateSql, mapSqlParameterSource);
     }
 }

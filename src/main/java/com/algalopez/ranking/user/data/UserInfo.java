@@ -11,5 +11,5 @@ public class UserInfo {
     private Long id;
     private String email;
     private String username;
-    private UserInfoLevel level;
+    private Integer level;
 }

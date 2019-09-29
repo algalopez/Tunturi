@@ -35,14 +35,15 @@ public class AuthServiceImplUnitTest {
     public void testExistingUser() {
 
         String username = "user";
-        UserDetails mockedUser = Auth.builder()
-                .id(1L)
-                .username(username)
-                .password("dvfndsiofj")
-                .enabled(true)
-                .locked(false)
-                .authorities(new ArrayList<>())
-                .build();
+        UserDetails mockedUser = new Auth(1L, username, "dvfndsiofj", true, false, new ArrayList<>());
+//        UserDetails mockedUser = Auth.builder()
+//                .id(1L)
+//                .username(username)
+//                .password("dvfndsiofj")
+//                .enabled(true)
+//                .locked(false)
+//                .authorities(new ArrayList<>())
+//                .build();
         when(authDao.findUserByUsername(username)).thenReturn(mockedUser);
         UserDetails actualUser = userService.loadUserByUsername(username);
         assertEquals(mockedUser, actualUser);
