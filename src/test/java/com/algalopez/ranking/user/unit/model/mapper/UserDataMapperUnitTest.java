@@ -1,6 +1,9 @@
 package com.algalopez.ranking.user.unit.model.mapper;
 
-import com.algalopez.ranking.user.model.*;
+import com.algalopez.ranking.user.model.User;
+import com.algalopez.ranking.user.model.UserAuth;
+import com.algalopez.ranking.user.model.UserInfo;
+import com.algalopez.ranking.user.model.UserRole;
 import com.algalopez.ranking.user.model.mapper.UserDataMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,10 +27,10 @@ public class UserDataMapperUnitTest {
     public void testFullMapToData() {
 
         UserAuth modelUserAuth = buildModelUserAuth(1L, "usr", "pass", true, false, UserRole.USER);
-        UserInfo modelUserInfo = buildModelUserInfo(1L, "usr", "email", UserLevel.EXPERT);
+        UserInfo modelUserInfo = buildModelUserInfo(1L, "usr", "email", 8);
 
         com.algalopez.ranking.user.data.UserAuth expectedDataUserAuth = buildDataUserAuth(1L, "usr", "pass", true, false, UserRole.USER.getRoleValue());
-        com.algalopez.ranking.user.data.UserInfo expectedDataUserInfo = buildDataUserInfo(1L, "usr", "email", UserLevel.EXPERT.getLevelValue());
+        com.algalopez.ranking.user.data.UserInfo expectedDataUserInfo = buildDataUserInfo(1L, "usr", "email", 8);
 
         UserDataMapper.DataUser dataUser = userDataMapper.mapTo(User.builder().userAuth(modelUserAuth).userInfo(modelUserInfo).build());
 
@@ -47,7 +50,7 @@ public class UserDataMapperUnitTest {
     @Test
     public void testNullUserRole() {
 
-        UserAuth modelUserAuth = buildModelUserAuth(1L, "usr", "pass", true, false, null);
+        UserAuth modelUserAuth = buildModelUserAuth(2L, "usr2", "pass2", false, true, null);
         UserDataMapper.DataUser dataUser = userDataMapper.mapTo(User.builder().userAuth(modelUserAuth).userInfo(null).build());
         assertNull(dataUser.getUserAuth().getRole());
     }
@@ -55,7 +58,7 @@ public class UserDataMapperUnitTest {
     @Test
     public void testNullUserLevel() {
 
-        UserInfo modelUserInfo = buildModelUserInfo(1L, "usr", "email", null);
+        UserInfo modelUserInfo = buildModelUserInfo(2L, "usr2", "email2", null);
         UserDataMapper.DataUser dataUser = userDataMapper.mapTo(User.builder().userAuth(null).userInfo(modelUserInfo).build());
         assertNull(dataUser.getUserInfo().getLevel());
     }
@@ -63,11 +66,11 @@ public class UserDataMapperUnitTest {
     @Test
     public void testFullMapFromData() {
 
-        com.algalopez.ranking.user.data.UserAuth dataUserAuth = buildDataUserAuth(1L, "usr", "pass", true, false, UserRole.USER.getRoleValue());
-        com.algalopez.ranking.user.data.UserInfo dataUserInfo = buildDataUserInfo(1L, "usr", "email", UserLevel.EXPERT.getLevelValue());
+        com.algalopez.ranking.user.data.UserAuth dataUserAuth = buildDataUserAuth(3L, "usr3", "pass3", false, true, UserRole.USER.getRoleValue());
+        com.algalopez.ranking.user.data.UserInfo dataUserInfo = buildDataUserInfo(3L, "usr3", "email3", 6);
 
-        UserAuth expectedModelUserAuth = buildModelUserAuth(1L, "usr", "pass", true, false, UserRole.USER);
-        UserInfo expectedModelUserInfo = buildModelUserInfo(1L, "usr", "email", UserLevel.EXPERT);
+        UserAuth expectedModelUserAuth = buildModelUserAuth(3L, "usr3", "pass3", false, true, UserRole.USER);
+        UserInfo expectedModelUserInfo = buildModelUserInfo(3L, "usr3", "email3", 6);
 
         User user = userDataMapper.mapFrom(new UserDataMapper.DataUser(dataUserAuth, dataUserInfo));
 
@@ -100,7 +103,7 @@ public class UserDataMapperUnitTest {
                 .build();
     }
 
-    private UserInfo buildModelUserInfo(Long id, String username, String email, UserLevel level) {
+    private UserInfo buildModelUserInfo(Long id, String username, String email, Integer level) {
 
         return UserInfo.builder()
                 .id(id)

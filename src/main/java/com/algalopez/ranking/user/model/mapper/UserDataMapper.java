@@ -37,12 +37,11 @@ public class UserDataMapper implements Mapper<User, UserDataMapper.DataUser> {
             return null;
         }
 
-        Integer parsedLevel = modelUserInfo.getLevel() == null ? null : modelUserInfo.getLevel().getLevelValue();
         return com.algalopez.ranking.user.data.UserInfo.builder()
                 .id(modelUserInfo.getId())
                 .username(modelUserInfo.getUsername())
                 .email(modelUserInfo.getEmail())
-                .level(parsedLevel)
+                .level(modelUserInfo.getLevel())
                 .build();
     }
 
@@ -90,7 +89,7 @@ public class UserDataMapper implements Mapper<User, UserDataMapper.DataUser> {
                 .id(dataUserInfo.getId())
                 .username(dataUserInfo.getUsername())
                 .email(dataUserInfo.getEmail())
-                .level(UserLevel.parseUserLevel(dataUserInfo.getLevel()))
+                .level(dataUserInfo.getLevel())
                 .build();
     }
 

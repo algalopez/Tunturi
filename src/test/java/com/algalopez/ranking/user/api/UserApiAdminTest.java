@@ -1,10 +1,9 @@
 package com.algalopez.ranking.user.api;
 
 import com.algalopez.ranking.RankingApplication;
-import com.algalopez.ranking.auth.Auth;
 import com.algalopez.ranking.user.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,9 +25,9 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -35,12 +35,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @Slf4j
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class UserApiTest {
+public class UserApiAdminTest {
 
-    private static final String GET_USER_ENDPOINT = "/api/users/{id}";
-    private static final String UPDATE_USER_ENDPOINT = "/api/users";
-    private static final String PATCH_USER_PASSWORD_ENDPOINT = "/api/users/{id}";
-    private static final Long ID = 1L;
+    private static final String GET_USER_ENDPOINT = "/api/admin/users/{id}";
+    private static final String UPDATE_USER_ENDPOINT = "/api/admin/users";
+    private static final List<SimpleGrantedAuthority> ADMIN_ROLE = Collections.singletonList(new SimpleGrantedAuthority("ADMIN"));
     private static final int ONCE = 1;
 
     @MockBean
@@ -62,50 +61,37 @@ public class UserApiTest {
         objectMapper = new ObjectMapper();
     }
 
+    @WithMockUser(value = "admin", roles = "ADMIN")
     @Test
-    public void testGetUser() throws Exception {
+    public void testGetUserAsAdmin() throws Exception {
 
+        Long id = 1L;
         when(userService.findUserById(any())).thenReturn(null);
 
-        List<SimpleGrantedAuthority> role = Collections.singletonList(new SimpleGrantedAuthority("USER"));
-        mvc.perform(get(GET_USER_ENDPOINT, ID)
-                .with(user(new Auth(ID, "user1", "b", true, true, role)))
+        mvc.perform(get(GET_USER_ENDPOINT, id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        verify(userService, times(ONCE)).findUserById(id);
     }
 
+    @WithMockUser(value = "admin", roles = "ADMIN")
     @Test
-    public void testUpdateUser() throws Exception {
+    public void testUpdateUserAsAdmin() throws Exception {
 
-        doNothing().when(userService).updateUserInfo(any(com.algalopez.ranking.user.model.User.class));
+        doNothing().when(userService).updateUser(any());
 
-        List<SimpleGrantedAuthority> role = Collections.singletonList(new SimpleGrantedAuthority("USER"));
         mvc.perform(put(UPDATE_USER_ENDPOINT)
                 .content(objectMapper.writeValueAsString(buildUser()))
-                .with(user(new Auth(ID, "user1", "b", true, true, role)))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testPatchUserPassword() throws Exception {
-
-        String password = "pass";
-        doNothing().when(userService).patchUserPassword(ID, password);
-
-        List<SimpleGrantedAuthority> role = Collections.singletonList(new SimpleGrantedAuthority("USER"));
-        mvc.perform(patch(PATCH_USER_PASSWORD_ENDPOINT, ID)
-                .content(password)
-                .with(user(new Auth(ID, "user1", "b", true, true, role)))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(userService, times(ONCE)).patchUserPassword(ID, password);
+        verify(userService, times(ONCE)).updateUser(any());
     }
 
     private User buildUser() {
         return User.builder()
-                .id(ID)
+                .id(1L)
                 .username("user")
                 .email("email")
                 .password("password")
@@ -115,5 +101,4 @@ public class UserApiTest {
                 .level(4)
                 .build();
     }
-
 }

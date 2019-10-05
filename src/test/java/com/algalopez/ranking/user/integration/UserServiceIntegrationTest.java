@@ -3,7 +3,10 @@ package com.algalopez.ranking.user.integration;
 import com.algalopez.ranking.RankingApplication;
 import com.algalopez.ranking.user.UserService;
 import com.algalopez.ranking.user.data.UserInfoDao;
-import com.algalopez.ranking.user.model.*;
+import com.algalopez.ranking.user.model.User;
+import com.algalopez.ranking.user.model.UserAuth;
+import com.algalopez.ranking.user.model.UserInfo;
+import com.algalopez.ranking.user.model.UserRole;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +29,6 @@ import static org.junit.Assert.assertNotEquals;
 @Transactional
 public class UserServiceIntegrationTest {
 
-    private static final String ID_PARAM = "id";
-
     @Autowired
     private UserInfoDao userInfoDao;
 
@@ -40,14 +41,14 @@ public class UserServiceIntegrationTest {
     @Test
     public void testValidUserCreation() {
 
-        User user = buildUser("user1", "email", "pass1", UserLevel.BEGINNER, true, false, UserRole.USER);
+        User user = buildUser("user1", "email", "pass1", 1, true, false, UserRole.USER);
         Long userId = userService.createUser(user);
 
         Map<String, Object> retrievedUser = findUserById(userId);
         assertEquals(user.getUserInfo().getUsername(), retrievedUser.get("username"));
         assertEquals(user.getUserInfo().getEmail(), retrievedUser.get("email"));
         assertEquals(user.getUserAuth().getPassword(), retrievedUser.get("password"));
-        assertEquals(user.getUserInfo().getLevel().getLevelValue(), retrievedUser.get("level"));
+        assertEquals(user.getUserInfo().getLevel(), retrievedUser.get("level"));
         assertEquals(user.getUserAuth().isEnabled(), retrievedUser.get("enabled"));
         assertEquals(user.getUserAuth().isLocked(), retrievedUser.get("locked"));
         assertEquals(user.getUserAuth().getRole().getRoleValue(), retrievedUser.get("role"));
@@ -56,7 +57,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void testFindExistingUserById() {
 
-        User expectedUser = buildUser("user1", "email", "pass1", UserLevel.BEGINNER, true, false, UserRole.USER);
+        User expectedUser = buildUser("user1", "email", "pass1", 1, true, false, UserRole.USER);
         Long userId = userService.createUser(expectedUser);
         expectedUser.getUserAuth().setId(userId);
         expectedUser.getUserInfo().setId(userId);
@@ -70,10 +71,10 @@ public class UserServiceIntegrationTest {
     @Test
     public void testValidUserUpdate() {
 
-        User initialUser = buildUser("user1", "email1", "pass1", UserLevel.BEGINNER, true, false, UserRole.USER);
+        User initialUser = buildUser("user1", "email1", "pass1", 1, true, false, UserRole.USER);
         Long userId = userService.createUser(initialUser);
 
-        User finalUser = buildUser("user2", "email2", "pass2", UserLevel.EXPERT, false, true, UserRole.ADMIN);
+        User finalUser = buildUser("user2", "email2", "pass2", 8, false, true, UserRole.ADMIN);
         finalUser.getUserAuth().setId(userId);
         finalUser.getUserInfo().setId(userId);
 
@@ -82,7 +83,7 @@ public class UserServiceIntegrationTest {
         assertEquals(finalUser.getUserInfo().getUsername(), retrievedUser.get("username"));
         assertEquals(finalUser.getUserInfo().getEmail(), retrievedUser.get("email"));
         assertEquals(finalUser.getUserAuth().getPassword(), retrievedUser.get("password"));
-        assertEquals(finalUser.getUserInfo().getLevel().getLevelValue(), retrievedUser.get("level"));
+        assertEquals(finalUser.getUserInfo().getLevel(), retrievedUser.get("level"));
         assertEquals(finalUser.getUserAuth().isEnabled(), retrievedUser.get("enabled"));
         assertEquals(finalUser.getUserAuth().isLocked(), retrievedUser.get("locked"));
         assertEquals(finalUser.getUserAuth().getRole().getRoleValue(), retrievedUser.get("role"));
@@ -91,11 +92,11 @@ public class UserServiceIntegrationTest {
     @Test
     public void testValidUserInfoUpdate() {
 
-        User initialUser = buildUser("user1", "email1", "pass1", UserLevel.BEGINNER, true, false, UserRole.USER);
+        User initialUser = buildUser("user1", "email1", "pass1", 1, true, false, UserRole.USER);
         Long userId = userService.createUser(initialUser);
 
 
-        User finalUser = buildUser("user2", "email2", "pass2", UserLevel.EXPERT, false, true, UserRole.ADMIN);
+        User finalUser = buildUser("user2", "email2", "pass2", 8, false, true, UserRole.ADMIN);
         finalUser.getUserAuth().setId(userId);
         finalUser.getUserInfo().setId(userId);
 
@@ -108,14 +109,14 @@ public class UserServiceIntegrationTest {
         assertEquals(initialUser.getUserAuth().isLocked(), retrievedUser.get("locked"));
         assertEquals(initialUser.getUserAuth().getRole().getRoleValue(), retrievedUser.get("role"));
         assertEquals(finalUser.getUserInfo().getEmail(), retrievedUser.get("email"));
-        assertEquals(finalUser.getUserInfo().getLevel().getLevelValue(), retrievedUser.get("level"));
+        assertEquals(finalUser.getUserInfo().getLevel(), retrievedUser.get("level"));
     }
 
     @Test
     public void testUserPasswordPatch() {
         String oldPassword = "pass1";
         String newPassword = "pass2";
-        User initialUser = buildUser("user1", "email1", oldPassword, UserLevel.BEGINNER, true, false, UserRole.USER);
+        User initialUser = buildUser("user1", "email1", oldPassword, 2, true, false, UserRole.USER);
         Long userId = userService.createUser(initialUser);
 
         userService.patchUserPassword(userId, newPassword);
@@ -131,7 +132,7 @@ public class UserServiceIntegrationTest {
         return namedParameterJdbcTemplate.queryForMap(query, parameters);
     }
 
-    private User buildUser(String username, String email, String password, UserLevel level, Boolean enabled, Boolean locked, UserRole role) {
+    private User buildUser(String username, String email, String password, Integer level, Boolean enabled, Boolean locked, UserRole role) {
 
         UserInfo userInfo = UserInfo.builder()
                 .email(email)
