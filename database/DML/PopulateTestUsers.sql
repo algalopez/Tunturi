@@ -1,6 +1,6 @@
 USE `ranking`
 
-INSERT INTO user (id, username, password, enabled, locked, role) VALUES
+INSERT INTO `user_auth` (id, username, password, enabled, locked, role) VALUES
 	('1', 'user1@ranking.com', '$2y$12$B1esoIXpxaxbuDQCqgCDEeOi.XkesMVObAqF/NbvQcxBiJncbh3Bi', true, false, 'USER'), -- pass1
 	('2', 'user2@ranking.com', '$2y$12$Xt2skMlo59OJNQpy30q2p.YyHLgjPcZIUuk4PE7K38vSbNg62ikYa', true, false, 'USER'), -- pass2
 	('3', 'user3@ranking.com', '$2y$12$VugwdmBe0r/WawvQRe9a4u3LCMvSwG3pjNx62qVUfzKkV1S3mQKX6', true, false, 'USER'), -- pass3

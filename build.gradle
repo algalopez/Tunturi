@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
     id "org.sonarqube" version "2.7"
     id 'jacoco'
     id 'io.franzbecker.gradle-lombok' version '3.0.0'
@@ -22,9 +22,11 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: spring_boot_version
     compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: spring_boot_version
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: mariadb_version
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: swagger_version
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: swagger_version
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
-    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.1.5.RELEASE'
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: spring_security_version
 }
 
 sonarqube {
@@ -64,15 +66,15 @@ task copyArtifacts(type: Copy) {
     group 'Ranking'
     from 'build/libs/'
     include 'Ranking-*.jar'
-    into "deliver/"
+    into "artifact/"
 }
 
 task zipArtifacts(type: Zip, dependsOn: ['copyArtifacts']) {
     group 'Ranking'
     archiveName = "Ranking.zip"
 
-    from "deliver/"
+    from "artifact/"
     exclude '*.zip'
     exclude '.gitkeep'
-    destinationDir = file('deliver')
+    destinationDir = file('artifact')
 }

@@ -1,8 +1,8 @@
 package com.algalopez.ranking.auth.integration;
 
 import com.algalopez.ranking.RankingApplication;
-import com.algalopez.ranking.auth.AuthenticationServiceImpl;
-import com.algalopez.ranking.auth.User;
+import com.algalopez.ranking.auth.Auth;
+import com.algalopez.ranking.auth.AuthProviderImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 public class AuthenticationProviderIntegrationTest {
 
     @Autowired
-    private AuthenticationServiceImpl authenticationService;
+    private AuthProviderImpl authenticationService;
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -41,15 +41,15 @@ public class AuthenticationProviderIntegrationTest {
 
         final String username = "user";
         final String credentials = "password";
-        User expectedUser = buildUser(username, credentials, true, false, "USER");
-        Long userId = insertUser(expectedUser);
-        expectedUser.setId(userId);
+        Auth expectedAuth = buildUser(username, credentials, true, false, "USER");
+        Long userId = insertUser(expectedAuth);
+        expectedAuth.setId(userId);
 
-        Authentication authenticationProvided = new UsernamePasswordAuthenticationToken(expectedUser, credentials);
+        Authentication authenticationProvided = new UsernamePasswordAuthenticationToken(expectedAuth, credentials);
         Authentication authentication = authenticationService.authenticate(authenticationProvided);
-        assertEquals(expectedUser.getUsername(), authentication.getName());
-        assertEquals(expectedUser.getPassword(), authentication.getCredentials());
-        assertEquals(expectedUser.getAuthorities(), authentication.getAuthorities());
+        assertEquals(expectedAuth.getUsername(), authentication.getName());
+        assertEquals(expectedAuth.getPassword(), authentication.getCredentials());
+        assertEquals(expectedAuth.getAuthorities(), authentication.getAuthorities());
     }
 
     @Test(expected = BadCredentialsException.class)
@@ -57,14 +57,14 @@ public class AuthenticationProviderIntegrationTest {
 
         final String username2 = "user2";
         final String credentials2 = "password2";
-        User expectedUser = buildUser(username2, credentials2, true, false, "USER");
-        expectedUser.setId(1L);
+        Auth expectedAuth = buildUser(username2, credentials2, true, false, "USER");
+        expectedAuth.setId(1L);
 
-        Authentication authenticationProvided = new UsernamePasswordAuthenticationToken(expectedUser, credentials2);
+        Authentication authenticationProvided = new UsernamePasswordAuthenticationToken(expectedAuth, credentials2);
         Authentication authentication = authenticationService.authenticate(authenticationProvided);
-        assertEquals(expectedUser.getUsername(), authentication.getName());
-        assertEquals(expectedUser.getPassword(), authentication.getCredentials());
-        assertEquals(expectedUser.getAuthorities(), authentication.getAuthorities());
+        assertEquals(expectedAuth.getUsername(), authentication.getName());
+        assertEquals(expectedAuth.getPassword(), authentication.getCredentials());
+        assertEquals(expectedAuth.getAuthorities(), authentication.getAuthorities());
     }
 
     @Test(expected = BadCredentialsException.class)
@@ -72,42 +72,45 @@ public class AuthenticationProviderIntegrationTest {
 
         final String username3 = "user3";
         final String credentials3 = "password3";
-        User expectedUser = buildUser(username3, credentials3, false, true, "ADMIN");
-        Long userId = insertUser(expectedUser);
-        expectedUser.setId(userId);
+        Auth expectedAuth = buildUser(username3, credentials3, false, true, "ADMIN");
+        Long userId = insertUser(expectedAuth);
+        expectedAuth.setId(userId);
 
-        expectedUser.setUsername("Non existing name");
-        Authentication authenticationProvided = new UsernamePasswordAuthenticationToken(expectedUser, credentials3);
+        expectedAuth.setUsername("Non existing name");
+        Authentication authenticationProvided = new UsernamePasswordAuthenticationToken(expectedAuth, credentials3);
         Authentication authentication = authenticationService.authenticate(authenticationProvided);
-        assertEquals(expectedUser.getUsername(), authentication.getName());
-        assertEquals(expectedUser.getPassword(), authentication.getCredentials());
-        assertEquals(expectedUser.getAuthorities(), authentication.getAuthorities());
+        assertEquals(expectedAuth.getUsername(), authentication.getName());
+        assertEquals(expectedAuth.getPassword(), authentication.getCredentials());
+        assertEquals(expectedAuth.getAuthorities(), authentication.getAuthorities());
     }
 
-    private Long insertUser(User user) {
+    private Long insertUser(Auth auth) {
 
-        final String insertSql = "INSERT INTO `user` (username, password, enabled, locked, role) " +
+        final String insertSql = "INSERT INTO `user_auth` (username, password, enabled, locked, role) " +
                 "VALUES (:username, :password, :enabled, :locked, :role)";
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("username", user.getUsername());
-        parameters.put("password", user.getPassword());
-        parameters.put("enabled", user.isEnabled());
-        parameters.put("locked", !user.isAccountNonLocked());
-        parameters.put("role", user.getAuthorities().get(0).getAuthority());
+        parameters.put("username", auth.getUsername());
+        parameters.put("password", auth.getPassword());
+        parameters.put("enabled", auth.isEnabled());
+        parameters.put("locked", !auth.isAccountNonLocked());
+        parameters.put("role", auth.getAuthorities().iterator().next().getAuthority());
+//        parameters.put("role", auth.getAuthorities().get(0).getAuthority());
         namedParameterJdbcTemplate.update(insertSql, parameters);
 
-        final String queryUser = "SELECT id FROM `user` WHERE username=:username";
-        SqlParameterSource queryParams = new MapSqlParameterSource("username", user.getUsername());
+        final String queryUser = "SELECT id FROM `user_auth` WHERE username=:username";
+        SqlParameterSource queryParams = new MapSqlParameterSource("username", auth.getUsername());
         return namedParameterJdbcTemplate.queryForObject(queryUser, queryParams, Long.class);
     }
 
-    private User buildUser(String username, String password, Boolean enabled, Boolean locked, String role) {
-        return User.builder()
-                .username(username)
-                .password(password)
-                .enabled(enabled)
-                .locked(locked)
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority(role)))
-                .build();
+    private Auth buildUser(String username, String password, Boolean enabled, Boolean locked, String role) {
+        return new Auth(null, username, password, enabled, locked, Collections.singletonList(new SimpleGrantedAuthority(role)));
+
+//        return Auth.builder()
+//                .username(username)
+//                .password(password)
+//                .enabled(enabled)
+//                .locked(locked)
+//                .authorities(Collections.singletonList(new SimpleGrantedAuthority(role)))
+//                .build();
     }
 }
