@@ -1,9 +1,4 @@
-USE `ranking` /*!40100 DEFAULT CHARACTER SET utf8mb4 */
-
-CREATE TABLE `sample` (
-    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `sample` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+USE `tunturi` /*!40100 DEFAULT CHARACTER SET utf8mb4 */
 
 CREATE TABLE `user_auth` (
     `id` int(11) AUTO_INCREMENT PRIMARY KEY,

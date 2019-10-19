@@ -17,9 +17,9 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,Europe/Madrid} %5p 10836 --- [%t] %-40.40logger{39} : %m%n%wEx</pattern>
             <outputPatternAsHeader>true</outputPatternAsHeader>
         </encoder>
-        <file>logs/Ranking.log</file>
+        <file>logs/Tunturi.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>logs/Ranking.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <fileNamePattern>logs/Tunturi.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
@@ -31,9 +31,9 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,Europe/Madrid} %5p 10836 --- [%t] %-40.40logger{39} : %m%n%wEx</pattern>
             <outputPatternAsHeader>false</outputPatternAsHeader>
         </encoder>
-        <file>logs/RankingAuditor.log</file>
+        <file>logs/TunturiAuditor.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/RankingAuditor.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>logs/TunturiAuditor.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>3</maxHistory>
         </rollingPolicy>
     </appender>
@@ -42,7 +42,7 @@
         <appender-ref ref="AUDITOR"/>
     </logger>
 
-    <logger name="com.algalopez.ranking" level="DEBUG" additivity="false">
+    <logger name="com.algalopez.tunturi" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>

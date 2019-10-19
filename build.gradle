@@ -6,7 +6,7 @@ plugins {
     id 'io.franzbecker.gradle-lombok' version '3.0.0'
 }
 
-group 'com.algalopez.ranking'
+group 'com.algalopez.tunturi'
 version project_version
 
 sourceCompatibility = 11
@@ -35,15 +35,15 @@ dependencies {
 
 sonarqube {
     properties {
-        property 'sonar.projectKey', 'Ranking'
-        property 'sonar.projectName', 'Ranking'
+        property 'sonar.projectKey', 'Tunturi'
+        property 'sonar.projectName', 'Tunturi'
         property 'sonar.projectVersion', version
         property 'sonar.language', 'java'
         property 'sonar.sources', 'src/main/java'
         property 'sonar.tests', 'src/test/java'
         property 'sonar.sourceEncoding', 'UTF-8'
-        property 'sonar.exclusions', '**/RankingApplication.java, **/*Config.java, **/*Constants.java'
-        property 'sonar.coverage.exclusions', '**/RankingApplication.java, **/*Config.java, **/*Constants.java'
+        property 'sonar.exclusions', '**/TunturiApplication.java, **/*Config.java, **/*Constants.java'
+        property 'sonar.coverage.exclusions', '**/TunturiApplication.java, **/*Config.java, **/*Constants.java'
     }
 }
 
@@ -55,26 +55,26 @@ jacocoTestReport {
 }
 
 task createDatabase(type: Exec) {
-    group = 'Ranking'
+    group = 'Tunturi'
     workingDir "${rootDir}/database"
     commandLine 'sh', './PrepareDatabase.sh'
 }
 
 task populateDatabase(type: Exec) {
-    group = 'Ranking'
+    group = 'Tunturi'
     workingDir "${rootDir}/database"
     commandLine 'sh', './PopulateDatabase.sh'
 }
 
 task copyArtifacts(type: Copy) {
-    group 'Ranking'
+    group 'Tunturi'
     from 'build/libs/'
-    include 'Ranking-*.jar'
+    include 'Tunturi-*.jar'
     into "artifact/"
 }
 
 task zipArtifacts(type: Zip, dependsOn: ['copyArtifacts']) {
-    group 'Ranking'
+    group 'Tunturi'
 
     from "artifact/"
     exclude '*.zip'
