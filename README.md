@@ -1,4 +1,4 @@
-# Ranking
+# Tunturi
 
 Just a small project for 
 
