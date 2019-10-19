@@ -4,25 +4,25 @@ pipeline {
     stages {
         stage('Prepare environment') {
             steps {
-                echo 'Add gradle with version...'
-                sh 'gradle wrapper --gradle-version=5.6.1'
+                echo 'Creating gradle wrapper...'
+                sh 'gradle wrapper'
             }
         }
         stage('Create Database') {
             steps {
-                echo 'Create Database...'
+                echo 'Creating Database...'
                 sh './gradlew createDatabase'
             }
         }
         stage('Build and Test') {
             steps {
-                echo 'Build...'
+                echo 'Building and unit testing...'
                 sh './gradlew clean build'
             }
         }
         stage('Sonarqube') {
             steps {
-                echo 'Sonarqube...'
+                echo 'Checking quality with Sonarqube...'
                 sh './gradlew sonarqube'
             }
         }
