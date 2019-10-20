@@ -5,7 +5,10 @@ pipeline {
         stage('Prepare environment') {
             steps {
                 echo 'Creating gradle wrapper...'
-                sh 'gradle wrapper'
+                sh 'gradle wrapper --gradle-version=5.6.3'
+
+                echo 'Bringing up database server...'
+                sh './gradlew runDatabaseDocker'
             }
         }
         stage('Create Database') {
@@ -24,6 +27,12 @@ pipeline {
             steps {
                 echo 'Checking quality with Sonarqube...'
                 sh './gradlew sonarqube'
+            }
+        }
+        stage('Artifacts') {
+            steps {
+                echo 'Zipping deployment artifacts'
+                sh './gradlew zipArtifacts'
             }
         }
     }

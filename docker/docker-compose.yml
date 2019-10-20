@@ -1,0 +1,16 @@
+version: '3'
+services:
+  db:
+    build:
+      context: ../.
+      dockerfile: docker/db/Dockerfile
+    ports:
+      - "10301:3306"
+  app:
+    build:
+      context: ../.
+      dockerfile: docker/app/Dockerfile
+    ports:
+      - "10300:10300"
+    depends_on:
+      - db
