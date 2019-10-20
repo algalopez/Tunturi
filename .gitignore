@@ -10,5 +10,6 @@ gradle/
 build/
 out/
 logs/
+deploy/
 
 # Root

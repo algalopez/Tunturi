@@ -7,8 +7,8 @@ plugins {
 
 group 'com.algalopez.tunturi'
 version project_version
-
 sourceCompatibility = 11
+apply from: 'docker/docker.gradle'
 
 repositories {
     mavenCentral()
@@ -58,29 +58,45 @@ jacocoTestReport {
 }
 
 task createDatabase(type: Exec) {
-    group = 'Tunturi'
-    workingDir "${rootDir}/database"
-    commandLine 'sh', './PrepareDatabase.sh'
+    group = 'tunturi'
+    commandLine 'sh', './database/PrepareDatabase.sh'
 }
 
 task populateDatabase(type: Exec) {
-    group = 'Tunturi'
-    workingDir "${rootDir}/database"
-    commandLine 'sh', './PopulateDatabase.sh'
+    group = 'tunturi'
+    commandLine 'sh', './database/PopulateDatabase.sh'
 }
 
 task copyArtifacts(type: Copy) {
-    group 'Tunturi'
-    from 'build/libs/'
-    include 'Tunturi-*.jar'
-    into "artifact/"
+    group 'tunturi'
+
+    copy {
+        from('build/libs/') {
+            include 'Tunturi-*.jar'
+        }
+        into "deploy/artifact"
+    }
+
+    copy {
+        from('docker') {
+            exclude 'docker.gradle'
+        }
+        into "deploy/docker"
+    }
+
+    copy {
+        from('.') {
+            include 'README.md'
+        }
+        into "deploy"
+    }
 }
 
 task zipArtifacts(type: Zip, dependsOn: ['copyArtifacts']) {
-    group 'Tunturi'
+    group 'tunturi'
 
-    from "artifact/"
+    from "deploy/"
     exclude '*.zip'
     exclude '.gitkeep'
-    destinationDirectory = file('artifact')
+    destinationDirectory = file('deploy')
 }

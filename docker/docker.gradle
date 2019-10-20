@@ -1,0 +1,99 @@
+/*
+Common docker commands
+
+Containers: docker ps -a
+Images: docker images
+ */
+
+task showDockerContainers(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker"
+    args('ps', '-a')
+}
+
+task showDockerImages(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker"
+    args('images')
+}
+
+/*
+ Database Docker commands
+
+ Build: docker build -f docker/db/Dockerfile -t db-docker .
+ Run: docker run --name db-docker -d -p 10301:3306 db-docker
+ Stop: docker stop db-docker
+ Remove: docker rm -f db-docker
+ */
+task buildDatabaseDocker(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker"
+    args('build', '-f', 'docker/db/Dockerfile', '-t', 'db-docker', '.')
+}
+
+task runDatabaseDocker(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker"
+    args('run', '--name', 'db-docker', '-d', '-p', '10301:3306', 'db-docker')
+}
+
+task stopDatabaseDocker(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker"
+    args('stop', 'db-docker')
+}
+
+task stopAndRemoveDatabaseDocker(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker"
+    args('rm', '-f', 'db-docker')
+}
+
+/*
+ App Docker commands
+
+ Build: docker build -f docker/app/Dockerfile -t app-docker .
+ Run: docker run --name app-docker -d app-docker
+ Stop: docker stop app-docker
+ Remove: docker rm -f app-docker
+ */
+task buildAppDocker(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker"
+    args('build', '-f', 'docker/app/Dockerfile', '-t', 'app-docker', '.')
+}
+
+task runAppDocker(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker"
+    args('run', '--name', 'app-docker', '-d', 'app-docker')
+}
+
+task stopAppDocker(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker"
+    args('stop', 'app-docker')
+}
+
+task stopAndRemoveAppDocker(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker"
+    args('rm', '-f', 'app-docker')
+}
+
+/*
+Docker compose commands
+
+Up: docker-compose -f docker/docker-compose.yml up -d
+Down: docker-compose -f docker/docker-compose.yml down
+ */
+task orchestrateContainersUp(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker-compose"
+    args('-f', 'docker/docker-compose.yml', 'up', '-d')
+}
+task orchestrateContainersDown(type: Exec) {
+    group 'tunturi-docker'
+    executable "docker-compose"
+    args('-f', 'docker/docker-compose.yml', 'down')
+}

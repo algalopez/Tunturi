@@ -10,5 +10,7 @@ services:
     build:
       context: ../.
       dockerfile: docker/app/Dockerfile
+    ports:
+      - "10300:10300"
     depends_on:
       - db
