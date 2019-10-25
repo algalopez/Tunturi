@@ -28,7 +28,7 @@ task showDockerImages(type: Exec) {
 task buildDatabaseDocker(type: Exec) {
     group 'tunturi-docker'
     executable "docker"
-    args('build', '-f', 'docker/db/Dockerfile', '-t', 'db-docker', '.')
+    args('build', '-f', "${projectDir}/deploy/docker/db/Dockerfile", '-t', 'db-docker', '.')
 }
 
 task runDatabaseDocker(type: Exec) {
@@ -60,7 +60,7 @@ task stopAndRemoveDatabaseDocker(type: Exec) {
 task buildAppDocker(type: Exec) {
     group 'tunturi-docker'
     executable "docker"
-    args('build', '-f', 'docker/app/Dockerfile', '-t', 'app-docker', '.')
+    args('build', '-f', "${projectDir}/deploy/docker/app/Dockerfile", '-t', 'app-docker', "${projectDir}/deploy")
 }
 
 task runAppDocker(type: Exec) {
@@ -90,10 +90,10 @@ Down: docker-compose -f docker/docker-compose.yml down
 task orchestrateContainersUp(type: Exec) {
     group 'tunturi-docker'
     executable "docker-compose"
-    args('-f', 'docker/docker-compose.yml', 'up', '-d')
+    args('-f', "${projectDir}/deploy/docker/docker-compose.yml", 'up', '-d')
 }
 task orchestrateContainersDown(type: Exec) {
     group 'tunturi-docker'
     executable "docker-compose"
-    args('-f', 'docker/docker-compose.yml', 'down')
+    args('-f', "${projectDir}/deploy/docker/docker-compose.yml", 'down')
 }

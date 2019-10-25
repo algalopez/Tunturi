@@ -67,6 +67,16 @@ task populateDatabase(type: Exec) {
     commandLine 'sh', './database/PopulateDatabase.sh'
 }
 
+task cleanArtifacts(type: Delete) {
+    group 'tunturi'
+
+    delete ('deploy/docker')
+    delete ('deploy/artifact')
+    delete fileTree('deploy').matching {
+        exclude '.gitkeep'
+    }
+}
+
 task copyArtifacts(type: Copy) {
     group 'tunturi'
 
@@ -82,6 +92,20 @@ task copyArtifacts(type: Copy) {
             exclude 'docker.gradle'
         }
         into "deploy/docker"
+    }
+
+    copy {
+        from('build/resources/test/') {
+            include '*.properties'
+        }
+        into "deploy/"
+    }
+
+    copy {
+        from('build/resources/main/') {
+            include 'logback*.xml'
+        }
+        into "deploy/"
     }
 
     copy {
