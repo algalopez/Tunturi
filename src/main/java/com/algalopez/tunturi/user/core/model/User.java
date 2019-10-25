@@ -1,4 +1,4 @@
-package com.algalopez.tunturi.user.model;
+package com.algalopez.tunturi.user.core.model;
 
 import lombok.Builder;
 import lombok.Data;

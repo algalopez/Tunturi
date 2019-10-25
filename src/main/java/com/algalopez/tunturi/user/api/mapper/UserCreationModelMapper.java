@@ -1,11 +1,11 @@
 package com.algalopez.tunturi.user.api.mapper;
 
 import com.algalopez.tunturi.common.Mapper;
-import com.algalopez.tunturi.user.api.UserCreationRequest;
-import com.algalopez.tunturi.user.model.User;
-import com.algalopez.tunturi.user.model.UserAuth;
-import com.algalopez.tunturi.user.model.UserInfo;
-import com.algalopez.tunturi.user.model.UserRole;
+import com.algalopez.tunturi.user.api.model.UserCreationRequest;
+import com.algalopez.tunturi.user.core.model.User;
+import com.algalopez.tunturi.user.core.model.UserAuth;
+import com.algalopez.tunturi.user.core.model.UserInfo;
+import com.algalopez.tunturi.user.core.model.UserRole;
 
 public class UserCreationModelMapper implements Mapper<UserCreationRequest, User> {
 

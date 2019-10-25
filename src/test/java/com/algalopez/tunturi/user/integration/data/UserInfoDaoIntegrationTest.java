@@ -1,7 +1,7 @@
 package com.algalopez.tunturi.user.integration.data;
 
 import com.algalopez.tunturi.TunturiApplication;
-import com.algalopez.tunturi.user.data.UserInfo;
+import com.algalopez.tunturi.user.data.model.UserInfo;
 import com.algalopez.tunturi.user.data.UserInfoDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;

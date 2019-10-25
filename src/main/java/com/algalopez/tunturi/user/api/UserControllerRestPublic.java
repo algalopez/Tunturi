@@ -1,8 +1,9 @@
 package com.algalopez.tunturi.user.api;
 
-import com.algalopez.tunturi.user.UserService;
+import com.algalopez.tunturi.user.api.model.UserCreationRequest;
+import com.algalopez.tunturi.user.core.UserService;
 import com.algalopez.tunturi.user.api.mapper.UserCreationModelMapper;
-import com.algalopez.tunturi.user.model.User;
+import com.algalopez.tunturi.user.core.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,8 @@
 package com.algalopez.tunturi.user.api;
 
 import com.algalopez.tunturi.TunturiApplication;
-import com.algalopez.tunturi.user.UserService;
+import com.algalopez.tunturi.user.api.model.User;
+import com.algalopez.tunturi.user.core.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;

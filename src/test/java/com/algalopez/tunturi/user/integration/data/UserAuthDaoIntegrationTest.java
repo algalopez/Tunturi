@@ -2,7 +2,7 @@ package com.algalopez.tunturi.user.integration.data;
 
 import com.algalopez.tunturi.TunturiApplication;
 import com.algalopez.tunturi.user.data.UserAuthDao;
-import com.algalopez.tunturi.user.data.UserAuth;
+import com.algalopez.tunturi.user.data.model.UserAuth;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

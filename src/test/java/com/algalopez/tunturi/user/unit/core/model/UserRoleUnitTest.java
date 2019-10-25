@@ -1,6 +1,6 @@
-package com.algalopez.tunturi.user.unit.model;
+package com.algalopez.tunturi.user.unit.core.model;
 
-import com.algalopez.tunturi.user.model.*;
+import com.algalopez.tunturi.user.core.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;

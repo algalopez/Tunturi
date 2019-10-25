@@ -2,7 +2,8 @@ package com.algalopez.tunturi.user.api;
 
 import com.algalopez.tunturi.TunturiApplication;
 import com.algalopez.tunturi.auth.Auth;
-import com.algalopez.tunturi.user.UserService;
+import com.algalopez.tunturi.user.api.model.User;
+import com.algalopez.tunturi.user.core.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -77,7 +78,7 @@ public class UserApiTest {
     @Test
     public void testUpdateUser() throws Exception {
 
-        doNothing().when(userService).updateUserInfo(any(com.algalopez.tunturi.user.model.User.class));
+        doNothing().when(userService).updateUserInfo(any(com.algalopez.tunturi.user.core.model.User.class));
 
         List<SimpleGrantedAuthority> role = Collections.singletonList(new SimpleGrantedAuthority("USER"));
         mvc.perform(put(UPDATE_USER_ENDPOINT)

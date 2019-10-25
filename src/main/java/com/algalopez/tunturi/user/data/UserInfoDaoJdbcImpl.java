@@ -1,5 +1,6 @@
 package com.algalopez.tunturi.user.data;
 
+import com.algalopez.tunturi.user.data.model.UserInfo;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

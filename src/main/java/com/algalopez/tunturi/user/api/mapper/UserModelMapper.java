@@ -1,16 +1,16 @@
 package com.algalopez.tunturi.user.api.mapper;
 
 import com.algalopez.tunturi.common.Mapper;
-import com.algalopez.tunturi.user.model.User;
-import com.algalopez.tunturi.user.model.UserAuth;
-import com.algalopez.tunturi.user.model.UserInfo;
-import com.algalopez.tunturi.user.model.UserRole;
+import com.algalopez.tunturi.user.core.model.User;
+import com.algalopez.tunturi.user.core.model.UserAuth;
+import com.algalopez.tunturi.user.core.model.UserInfo;
+import com.algalopez.tunturi.user.core.model.UserRole;
 
-public class UserModelMapper implements Mapper<com.algalopez.tunturi.user.api.User, User> {
+public class UserModelMapper implements Mapper<com.algalopez.tunturi.user.api.model.User, User> {
 
 
     @Override
-    public User mapTo(com.algalopez.tunturi.user.api.User apiUser) {
+    public User mapTo(com.algalopez.tunturi.user.api.model.User apiUser) {
 
         if (apiUser == null) {
             return null;
@@ -36,7 +36,7 @@ public class UserModelMapper implements Mapper<com.algalopez.tunturi.user.api.Us
     }
 
     @Override
-    public com.algalopez.tunturi.user.api.User mapFrom(User modelUser) {
+    public com.algalopez.tunturi.user.api.model.User mapFrom(User modelUser) {
 
         if (modelUser == null) {
             return null;
@@ -45,7 +45,7 @@ public class UserModelMapper implements Mapper<com.algalopez.tunturi.user.api.Us
         UserAuth modelUserAuth = modelUser.getUserAuth();
         UserInfo modelUserInfo = modelUser.getUserInfo();
 
-        com.algalopez.tunturi.user.api.User.UserBuilder userBuilder = com.algalopez.tunturi.user.api.User.builder();
+        com.algalopez.tunturi.user.api.model.User.UserBuilder userBuilder = com.algalopez.tunturi.user.api.model.User.builder();
 
         if (modelUserAuth != null) {
             userBuilder

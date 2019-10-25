@@ -1,4 +1,4 @@
-package com.algalopez.tunturi.user.api;
+package com.algalopez.tunturi.user.api.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
