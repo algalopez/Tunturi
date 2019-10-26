@@ -1,4 +1,4 @@
-USE `tunturi` /*!40100 DEFAULT CHARACTER SET utf8mb4 */
+USE `tunturi`;
 
 CREATE TABLE `user_auth` (
     `id` int(11) AUTO_INCREMENT PRIMARY KEY,
