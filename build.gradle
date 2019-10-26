@@ -70,8 +70,8 @@ task populateDatabase(type: Exec) {
 task cleanArtifacts(type: Delete) {
     group 'tunturi'
 
-    delete ('deploy/docker')
-    delete ('deploy/artifact')
+    delete('deploy/docker')
+    delete('deploy/artifact')
     delete fileTree('deploy').matching {
         exclude '.gitkeep'
     }
@@ -85,13 +85,6 @@ task copyArtifacts(type: Copy) {
             include 'Tunturi-*.jar'
         }
         into "deploy/artifact"
-    }
-
-    copy {
-        from('docker') {
-            exclude 'docker.gradle'
-        }
-        into "deploy/docker"
     }
 
     copy {

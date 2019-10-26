@@ -1,4 +1,4 @@
-USE `tunturi`
+USE `tunturi`;
 
 INSERT INTO `user_auth` (id, username, password, enabled, locked, role) VALUES
 	('1', 'user1@tunturi.com', '$2y$12$B1esoIXpxaxbuDQCqgCDEeOi.XkesMVObAqF/NbvQcxBiJncbh3Bi', true, false, 'USER'), -- pass1

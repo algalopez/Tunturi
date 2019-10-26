@@ -1,4 +1,4 @@
-USE `tunturi` /*!40100 DEFAULT CHARACTER SET utf8mb4 */
+USE `tunturi`;
 
 CREATE TABLE `user` (
     `id` INT(11) NOT NULL UNIQUE PRIMARY KEY,
