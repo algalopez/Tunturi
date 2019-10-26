@@ -23,6 +23,6 @@ script:
   - ./gradlew runDatabaseDocker
   - ./gradlew createDatabase
   - ./gradlew clean build
-  - ./gradlew sonarqube -Dsonar.branch.name="${TRAVIS_BRANCH}"
+  - ./gradlew sonarqube
   - ./gradlew copyArtifacts
   - ./gradlew zipArtifacts
