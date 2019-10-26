@@ -1,9 +1,9 @@
 package com.algalopez.tunturi.user.unit.api.mapper;
 
-import com.algalopez.tunturi.user.api.UserCreationRequest;
+import com.algalopez.tunturi.user.api.model.UserCreationRequest;
 import com.algalopez.tunturi.user.api.mapper.UserCreationModelMapper;
-import com.algalopez.tunturi.user.model.User;
-import com.algalopez.tunturi.user.model.UserRole;
+import com.algalopez.tunturi.user.core.model.User;
+import com.algalopez.tunturi.user.core.model.UserRole;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

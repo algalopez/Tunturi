@@ -1,12 +1,12 @@
 package com.algalopez.tunturi.user.integration;
 
 import com.algalopez.tunturi.TunturiApplication;
-import com.algalopez.tunturi.user.UserService;
+import com.algalopez.tunturi.user.core.UserService;
 import com.algalopez.tunturi.user.data.UserInfoDao;
-import com.algalopez.tunturi.user.model.User;
-import com.algalopez.tunturi.user.model.UserAuth;
-import com.algalopez.tunturi.user.model.UserInfo;
-import com.algalopez.tunturi.user.model.UserRole;
+import com.algalopez.tunturi.user.core.model.User;
+import com.algalopez.tunturi.user.core.model.UserAuth;
+import com.algalopez.tunturi.user.core.model.UserInfo;
+import com.algalopez.tunturi.user.core.model.UserRole;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

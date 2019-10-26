@@ -1,10 +1,10 @@
 package com.algalopez.tunturi.user.unit.api.mapper;
 
-import com.algalopez.tunturi.user.api.User;
+import com.algalopez.tunturi.user.api.model.User;
 import com.algalopez.tunturi.user.api.mapper.UserModelMapper;
-import com.algalopez.tunturi.user.model.UserAuth;
-import com.algalopez.tunturi.user.model.UserInfo;
-import com.algalopez.tunturi.user.model.UserRole;
+import com.algalopez.tunturi.user.core.model.UserAuth;
+import com.algalopez.tunturi.user.core.model.UserInfo;
+import com.algalopez.tunturi.user.core.model.UserRole;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +52,7 @@ public class UserModelMapperUnitTest {
                 .locked(LOCKED)
                 .build();
 
-        com.algalopez.tunturi.user.model.User modelUser = userModelMapper.mapTo(apiUser);
+        com.algalopez.tunturi.user.core.model.User modelUser = userModelMapper.mapTo(apiUser);
         UserAuth modelUserAuth = modelUser.getUserAuth();
         UserInfo modelUserInfo = modelUser.getUserInfo();
 
@@ -85,7 +85,7 @@ public class UserModelMapperUnitTest {
                 .email(EMAIL)
                 .level(LEVEL)
                 .build();
-        com.algalopez.tunturi.user.model.User modelUser = com.algalopez.tunturi.user.model.User.builder()
+        com.algalopez.tunturi.user.core.model.User modelUser = com.algalopez.tunturi.user.core.model.User.builder()
                 .userAuth(modelUserAuth)
                 .userInfo(modelUserInfo)
                 .build();
@@ -116,7 +116,7 @@ public class UserModelMapperUnitTest {
                 .email(EMAIL)
                 .level(LEVEL)
                 .build();
-        com.algalopez.tunturi.user.model.User modelUser = com.algalopez.tunturi.user.model.User.builder()
+        com.algalopez.tunturi.user.core.model.User modelUser = com.algalopez.tunturi.user.core.model.User.builder()
                 .userAuth(null)
                 .userInfo(modelUserInfo)
                 .build();
@@ -144,7 +144,7 @@ public class UserModelMapperUnitTest {
                 .role(UserRole.parseUserRole(ROLE))
                 .build();
 
-        com.algalopez.tunturi.user.model.User modelUser = com.algalopez.tunturi.user.model.User.builder()
+        com.algalopez.tunturi.user.core.model.User modelUser = com.algalopez.tunturi.user.core.model.User.builder()
                 .userAuth(modelUserAuth)
                 .userInfo(null)
                 .build();

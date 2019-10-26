@@ -1,5 +1,6 @@
 package com.algalopez.tunturi.user.data;
 
+import com.algalopez.tunturi.user.data.model.UserAuth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

@@ -1,6 +1,6 @@
-package com.algalopez.tunturi.user.data;
+package com.algalopez.tunturi.user.core;
 
-import com.algalopez.tunturi.user.data.model.UserInfo;
+import com.algalopez.tunturi.user.core.model.UserInfo;
 
 public interface UserInfoDao {
 

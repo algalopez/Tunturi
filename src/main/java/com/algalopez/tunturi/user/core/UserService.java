@@ -1,6 +1,6 @@
-package com.algalopez.tunturi.user;
+package com.algalopez.tunturi.user.core;
 
-import com.algalopez.tunturi.user.model.User;
+import com.algalopez.tunturi.user.core.model.User;
 
 public interface UserService {
 

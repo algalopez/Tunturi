@@ -1,6 +1,7 @@
 package com.algalopez.tunturi.user.api;
 
-import com.algalopez.tunturi.user.UserService;
+import com.algalopez.tunturi.user.api.model.User;
+import com.algalopez.tunturi.user.core.UserService;
 import com.algalopez.tunturi.user.api.mapper.UserModelMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +34,7 @@ public class UserControllerRestAdmin {
     @PutMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUserAsAdmin(@RequestBody User user) {
 
-        com.algalopez.tunturi.user.model.User userModel = new UserModelMapper().mapTo(user);
+        com.algalopez.tunturi.user.core.model.User userModel = new UserModelMapper().mapTo(user);
         userService.updateUser(userModel);
         return ResponseEntity.ok(user);
     }

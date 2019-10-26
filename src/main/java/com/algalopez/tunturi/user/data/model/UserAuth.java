@@ -1,4 +1,4 @@
-package com.algalopez.tunturi.user.data;
+package com.algalopez.tunturi.user.data.model;
 
 import lombok.*;
 
