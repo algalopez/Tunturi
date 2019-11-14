@@ -6,7 +6,6 @@
 # Root folders
 .gradle/
 .idea/
-gradle/
 build/
 out/
 logs/
