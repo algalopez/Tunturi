@@ -1,7 +1,9 @@
-FROM openjdk:11
+FROM amd64/adoptopenjdk:11.0.5_10-jdk-openj9-0.17.0-bionic
+
+ARG APP_VERSION
+
+ADD deploy/artifact/Tunturi-$APP_VERSION.jar Tunturi.jar
 
 EXPOSE 10300
 
-ADD artifact/Tunturi-1.0.0-SNAPSHOT.jar Tunturi-1.0.0-SNAPSHOT.jar
-
-ENTRYPOINT ["java","-jar","Tunturi-1.0.0-SNAPSHOT.jar"]
+CMD ["java","-jar","Tunturi.jar"]

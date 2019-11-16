@@ -4,8 +4,6 @@ branches:
     - develop
     - /^feature/poc/.*$/
 
-#install: gradle wrapper --gradle-version 5.6.3
-
 language: java
 jdk: openjdk11
 
@@ -16,7 +14,7 @@ addons:
   sonarcloud:
     organization: "algalopez"
     token:
-      secure: "57d6c1d150401a65393afae7dcd817ff35c703fb"
+      secure: $SONARCLOUD_TOKEN
 
 script:
   - ./gradlew buildDatabaseDocker

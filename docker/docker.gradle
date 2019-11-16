@@ -28,7 +28,7 @@ task showDockerImages(type: Exec) {
 task buildDatabaseDocker(type: Exec) {
     group 'tunturi-docker'
     executable "docker"
-    args('build', '-f', "${projectDir}/docker/db/Dockerfile", '-t', 'db-docker', "${projectDir}/docker")
+    args('build', '-f', "${projectDir}/docker/db/Dockerfile", '-t', 'db-docker', "${projectDir}/")
 }
 
 task runDatabaseDocker(type: Exec) {
@@ -36,10 +36,11 @@ task runDatabaseDocker(type: Exec) {
     executable "docker"
     args('run', '--name', 'db-docker', '-d', '-p', '10301:3306', 'db-docker')
 }
+
 runDatabaseDocker.doLast {
-    println("Waiting for database to start")
-    Thread.sleep(30000)
-    println("Finished waiting")
+    exec {
+        commandLine 'bash', "${projectDir}/docker/script/WaitForDatabase.sh"
+    }
 }
 
 task stopDatabaseDocker(type: Exec) {
@@ -65,7 +66,7 @@ task stopAndRemoveDatabaseDocker(type: Exec) {
 task buildAppDocker(type: Exec) {
     group 'tunturi-docker'
     executable "docker"
-    args('build', '-f', "${projectDir}/docker/app/Dockerfile", '-t', 'app-docker', "${projectDir}/docker")
+    args('build', '-f', "${projectDir}/docker/app/Dockerfile", '-t', 'app-docker', "--build-arg", "APP_VERSION=$project_version", "${projectDir}/")
 }
 
 task runAppDocker(type: Exec) {
