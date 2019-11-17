@@ -92,14 +92,15 @@ task copyArtifacts(type: Copy) {
         from('build/resources/test/') {
             include '*.properties'
         }
-        into "deploy/"
+        into "deploy/configuration/"
     }
 
     copy {
         from('build/resources/main/') {
             include 'logback*.xml'
+            include 'application.properties'
         }
-        into "deploy/"
+        into "deploy/configuration/"
     }
 
     copy {
