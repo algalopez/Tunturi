@@ -1,5 +1,5 @@
 #!/bin/sh
 
-mysql -u user -ppass -h127.0.0.1 -P10301 < database/DDL/CreateDatabase.sql
-mysql -u user -ppass -h127.0.0.1 -P10301 < database/DDL/CreateDatabaseAuth.sql
-mysql -u user -ppass -h127.0.0.1 -P10301 < database/DDL/CreateDatabaseUser.sql
+mysql -u user -ppass -h127.0.0.1 -P10301 < database/migration/V1_0_0_1__create_meta_information.sql
+mysql -u user -ppass -h127.0.0.1 -P10301 < database/migration/V1_0_0_2__create_auth.sql
+mysql -u user -ppass -h127.0.0.1 -P10301 < database/migration/V1_0_0_3__create_user.sql

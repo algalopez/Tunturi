@@ -19,7 +19,7 @@ addons:
 script:
   - ./gradlew buildDatabaseDocker
   - ./gradlew runDatabaseDocker
-  - ./gradlew createDatabase
+  - ./gradlew createDb
   - ./gradlew clean build
   - ./gradlew sonarqube
   - ./gradlew copyArtifacts
