@@ -12,3 +12,4 @@ logs/
 deploy/
 
 # Root
+local.properties

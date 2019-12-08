@@ -1,3 +1,3 @@
 #!/bin/sh
 
-mysql -u user -ppass < DML/PopulateTestUsers.sql
+mysql -u user -ppass < database/pre/V1_0_0_2_1__populate_test_users.sql

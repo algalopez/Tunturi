@@ -1,13 +1,18 @@
+import org.flywaydb.gradle.task.FlywayInfoTask
+import org.flywaydb.gradle.task.FlywayMigrateTask
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.2.0.RELEASE'
     id "org.sonarqube" version "2.8"
     id 'jacoco'
+    id "org.flywaydb.flyway" version "6.1.0"
 }
 
 group 'com.algalopez.tunturi'
 version project_version
 sourceCompatibility = 11
+
 apply from: 'docker/docker.gradle'
 
 repositories {
@@ -15,7 +20,7 @@ repositories {
 }
 
 wrapper {
-    gradleVersion = '5.6.3'
+    gradleVersion = '6.0.1'
 }
 
 dependencies {
@@ -28,11 +33,13 @@ dependencies {
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: mariadb_version
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: swagger_version
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: swagger_version
+
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: spring_security_version
+
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
 }
@@ -68,9 +75,40 @@ task populateDatabase(type: Exec) {
     commandLine 'sh', './database/PopulateDatabase.sh'
 }
 
+def dbPreClosure = {
+    url = 'jdbc:mariadb://127.0.0.1:10301/tunturi'
+    user = 'user'
+    password = 'pass'
+    locations = ["filesystem:${projectDir}/database/migration", "filesystem:${projectDir}/database/pre"]
+}
+
+def dbClosure = {
+    url = 'jdbc:mariadb://127.0.0.1:10301/tunturi'
+    user = 'user'
+    password = 'pass'
+    locations = ["filesystem:${projectDir}/database/migration"]
+}
+
+flyway dbClosure
+task flywayMigratePre(type: FlywayMigrateTask) { configure dbPreClosure }
+task flywayInfoPre(type: FlywayInfoTask) { configure dbPreClosure }
+
+task createDb() {
+    group 'tunturi'
+    flywayInfo.mustRunAfter(flywayMigrate)
+    flywayMigrate.mustRunAfter(flywayClean)
+    dependsOn (["flywayClean", "flywayMigrate", "flywayInfo"].asList())
+}
+
+task createDbPre() {
+    group 'tunturi'
+    flywayInfoPre.mustRunAfter(flywayMigratePre)
+    flywayMigratePre.mustRunAfter(flywayClean)
+    dependsOn (["flywayClean", "flywayMigratePre", "flywayInfoPre"].asList())
+}
+
 task cleanArtifacts(type: Delete) {
     group 'tunturi'
-
     delete('deploy/docker')
     delete('deploy/artifact')
     delete fileTree('deploy').matching {

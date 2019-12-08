@@ -8,7 +8,7 @@ pass=$(docker exec db-docker bash -c 'echo "$MARIADB_PASSWORD"' 2> /dev/null)
 url=$(docker exec db-docker bash -c 'echo "$DATABASE_URL"' 2> /dev/null)
 port=$(docker exec db-docker bash -c 'echo "$DATABASE_PORT"' 2> /dev/null)
 
-while [ $((++trie)) -le $numberOfTries ] && [ $status!="2" ]
+while [ $((++trie)) -le $numberOfTries ]
 do
 
   status=$(echo "show databases;" | mysql -u $user -p$pass -h$url -P$port 2> /dev/null | grep tunturi)
