@@ -32,6 +32,10 @@ jobs:
         - ./gradlew copyArtifacts
         - ./gradlew zipArtifacts
     - stage: publish
+      branches:
+        only:
+          - master
+          - develop
       script:
         - ./gradlew buildDatabaseDocker
         - ./gradlew buildAppDocker
