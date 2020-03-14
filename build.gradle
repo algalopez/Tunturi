@@ -97,14 +97,14 @@ task createDb() {
     group 'tunturi'
     flywayInfo.mustRunAfter(flywayMigrate)
     flywayMigrate.mustRunAfter(flywayClean)
-    dependsOn (["flywayClean", "flywayMigrate", "flywayInfo"].asList())
+    dependsOn(["flywayClean", "flywayMigrate", "flywayInfo"].asList())
 }
 
 task createDbPre() {
     group 'tunturi'
     flywayInfoPre.mustRunAfter(flywayMigratePre)
     flywayMigratePre.mustRunAfter(flywayClean)
-    dependsOn (["flywayClean", "flywayMigratePre", "flywayInfoPre"].asList())
+    dependsOn(["flywayClean", "flywayMigratePre", "flywayInfoPre"].asList())
 }
 
 task cleanArtifacts(type: Delete) {
@@ -156,4 +156,10 @@ task zipArtifacts(type: Zip, dependsOn: ['copyArtifacts']) {
     exclude '*.zip'
     exclude '.gitkeep'
     destinationDirectory = file('deploy')
+}
+
+task echo {
+    doLast {
+        println('echo')
+    }
 }

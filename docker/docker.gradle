@@ -6,13 +6,13 @@ Images: docker images
  */
 
 task showDockerContainers(type: Exec) {
-    group 'tunturi-docker'
+    group 'tunturi-docker-info'
     executable "docker"
     args('ps', '-a')
 }
 
 task showDockerImages(type: Exec) {
-    group 'tunturi-docker'
+    group 'tunturi-docker-info'
     executable "docker"
     args('images')
 }
@@ -94,12 +94,59 @@ Up: docker-compose -f docker/docker-compose.yml up -d
 Down: docker-compose -f docker/docker-compose.yml down
  */
 task orchestrateContainersUp(type: Exec) {
-    group 'tunturi-docker'
+    group 'tunturi-docker-compose'
     executable "docker-compose"
     args('-f', "${projectDir}/docker/docker-compose.yml", 'up', '-d')
 }
+
 task orchestrateContainersDown(type: Exec) {
-    group 'tunturi-docker'
+    group 'tunturi-docker-compose'
     executable "docker-compose"
     args('-f', "${projectDir}/docker/docker-compose.yml", 'down')
+}
+
+/*
+Docker publish commands
+
+login: docker login docker.pkg.github.com --username algalopez -p <TOKEN>
+logout: docker logout docker.pkg.github.com
+dbTag: docker tag db-docker docker.pkg.github.com/algalopez/tunturi/tunturi-db-docker:<PROJECT_VERSION>
+appTag: docker tag app-docker docker.pkg.github.com/algalopez/tunturi/tunturi-app-docker:<PROJECT_VERSION>
+bdPublish: docker push docker.pkg.github.com/algalopez/tunturi/tunturi-db-docker:<PROJECT_VERSION>
+appPublish: docker push docker.pkg.github.com/algalopez/tunturi/tunturi-app-docker:<PROJECT_VERSION>
+ */
+task loginToRegistry(type: Exec) {
+    group 'tunturi-docker-publish'
+    executable "docker"
+    args('login', 'docker.pkg.github.com', '--username', 'algalopez', '-p', System.getenv('REGISTRY_TOKEN'))
+}
+
+task logoutFromRegistry(type: Exec) {
+    group 'tunturi-docker-publish'
+    executable "docker"
+    args('logout', "docker.pkg.github.com")
+}
+
+task createDatabaseTag(type: Exec) {
+    group 'tunturi-docker-publish'
+    executable "docker"
+    args('tag', 'db-docker', "docker.pkg.github.com/algalopez/tunturi/tunturi-db-docker:${project_version}")
+}
+
+task createAppTag(type: Exec) {
+    group 'tunturi-docker-publish'
+    executable "docker"
+    args('tag', 'app-docker', "docker.pkg.github.com/algalopez/tunturi/tunturi-app-docker:${project_version}")
+}
+
+task publishDatabaseImage(type: Exec) {
+    group 'tunturi-docker-publish'
+    executable "docker"
+    args('push', "docker.pkg.github.com/algalopez/tunturi/tunturi-db-docker:${project_version}")
+}
+
+task publishAppImage(type: Exec) {
+    group 'tunturi-docker-publish'
+    executable "docker"
+    args('push', "docker.pkg.github.com/algalopez/tunturi/tunturi-app-docker:${project_version}")
 }
