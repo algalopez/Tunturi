@@ -16,11 +16,28 @@ addons:
     token:
       secure: $SONARCLOUD_TOKEN
 
-script:
-  - ./gradlew buildDatabaseDocker
-  - ./gradlew runDatabaseDocker
-  - ./gradlew createDb
-  - ./gradlew clean build
-  - ./gradlew sonarqube
-  - ./gradlew copyArtifacts
-  - ./gradlew zipArtifacts
+stages:
+  - build
+  - publish
+
+jobs:
+  include:
+    - stage: build
+      script:
+        - ./gradlew buildDatabaseDocker
+        - ./gradlew runDatabaseDocker
+        - ./gradlew createDb
+        - ./gradlew clean build
+        - ./gradlew sonarqube -Dsonar.login=$SONARCLOUD_TOKEN
+        - ./gradlew copyArtifacts
+        - ./gradlew zipArtifacts
+    - stage: publish
+      script:
+        - ./gradlew buildDatabaseDocker
+        - ./gradlew buildAppDocker
+        - ./gradlew loginToRegistry
+        - ./gradlew createDatabaseTag
+        - ./gradlew createAppTag
+        - ./gradlew publishDatabaseImage
+        - ./gradlew publishAppImage
+        - ./gradlew logoutFromRegistry
