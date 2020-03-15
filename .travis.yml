@@ -10,12 +10,6 @@ jdk: openjdk11
 services:
   - docker
 
-addons:
-  sonarcloud:
-    organization: "algalopez"
-    token:
-      secure: $SONARCLOUD_TOKEN
-
 stages:
   - build
   - publish
@@ -23,6 +17,11 @@ stages:
 jobs:
   include:
     - stage: build
+      addons:
+        sonarcloud:
+          organization: "algalopez"
+          token:
+            secure: $SONARCLOUD_TOKEN
       script:
         - ./gradlew buildDatabaseDocker
         - ./gradlew runDatabaseDocker
