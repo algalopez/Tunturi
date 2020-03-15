@@ -3,10 +3,10 @@ trie=0
 numberOfTries=30
 secondsBetweenTries=1
 
-user=$(docker exec db-docker bash -c 'echo "$MARIADB_USER"' 2> /dev/null)
-pass=$(docker exec db-docker bash -c 'echo "$MARIADB_PASSWORD"' 2> /dev/null)
-url=$(docker exec db-docker bash -c 'echo "$DATABASE_URL"' 2> /dev/null)
-port=$(docker exec db-docker bash -c 'echo "$DATABASE_PORT"' 2> /dev/null)
+user=$(docker exec tunturi-db bash -c 'echo "$MARIADB_USER"' 2> /dev/null)
+pass=$(docker exec tunturi-db bash -c 'echo "$MARIADB_PASSWORD"' 2> /dev/null)
+url=$(docker exec tunturi-db bash -c 'echo "$DATABASE_URL"' 2> /dev/null)
+port=$(docker exec tunturi-db bash -c 'echo "$DATABASE_PORT"' 2> /dev/null)
 
 while [ $((++trie)) -le $numberOfTries ]
 do
