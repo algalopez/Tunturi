@@ -46,7 +46,6 @@ Project Status Details
     * app: Application dockers for different environments
     * db: Database dockers for different environments
     * scripts: Some useful scripts
-* **pipeline:** Unmaintained CICD pipelines due to some cloud hosted tools (Travis) forcing pipelines to be in particular folders
 * **src:** Application code and unit and integration tests
     * auth: Spring security classes for authorization and authentication
     * common: Cross-cutting classes
