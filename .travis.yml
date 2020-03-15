@@ -28,7 +28,7 @@ jobs:
         - ./gradlew runDatabaseDocker
         - ./gradlew createDb
         - ./gradlew clean build
-        - ./gradlew sonarqube -Dsonar.login=$SONARCLOUD_TOKEN
+        - ./gradlew sonarqube
         - ./gradlew copyArtifacts
         - ./gradlew zipArtifacts
     - stage: publish
