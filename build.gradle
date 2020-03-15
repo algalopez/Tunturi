@@ -65,16 +65,6 @@ jacocoTestReport {
     }
 }
 
-task createDatabase(type: Exec) {
-    group = 'tunturi'
-    commandLine 'sh', './database/PrepareDatabase.sh'
-}
-
-task populateDatabase(type: Exec) {
-    group = 'tunturi'
-    commandLine 'sh', './database/PopulateDatabase.sh'
-}
-
 def dbPreClosure = {
     url = 'jdbc:mariadb://127.0.0.1:10301/tunturi'
     user = 'user'
@@ -156,10 +146,4 @@ task zipArtifacts(type: Zip, dependsOn: ['copyArtifacts']) {
     exclude '*.zip'
     exclude '.gitkeep'
     destinationDirectory = file('deploy')
-}
-
-task echo {
-    doLast {
-        println('echo')
-    }
 }
