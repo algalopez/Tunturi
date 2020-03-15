@@ -13,7 +13,7 @@
     <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,Europe/Madrid} %5p 10836 --- [%t] %-40.40logger{39} : %m%n%wEx</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,Europe/Madrid} %5p --- [%t] %-40.40logger{39} : %m%n%wEx</pattern>
             <outputPatternAsHeader>true</outputPatternAsHeader>
         </encoder>
         <file>logs/Tunturi.log</file>
@@ -27,7 +27,7 @@
     <appender name="AUDITOR"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,Europe/Madrid} %5p 10836 --- [%t] %-40.40logger{39} : %m%n%wEx</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,Europe/Madrid} %5p --- [%t] %-40.40logger{39} : %m%n%wEx</pattern>
             <outputPatternAsHeader>false</outputPatternAsHeader>
         </encoder>
         <file>logs/TunturiAuditor.log</file>
