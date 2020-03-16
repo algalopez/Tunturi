@@ -20,12 +20,13 @@ jobs:
       addons:
         sonarcloud:
           organization: "algalopez"
-          token: $SONARCLOUD_TOKEN
+          token: ${SONARCLOUD_TOKEN}
       script:
         - ./gradlew buildDatabaseDocker
         - ./gradlew runDatabaseDocker
         - ./gradlew createDb
         - ./gradlew clean build
+        - ./gradlew jacocoTestReport
         - ./gradlew sonarqube
         - ./gradlew copyArtifacts
         - ./gradlew zipArtifacts
