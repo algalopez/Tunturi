@@ -32,7 +32,9 @@ public class EchoServiceIntegrationTest {
     @Test
     public void testEcho_multipleRepetitions() {
         for (int j = 0; j < TEST_REPETITIONS; j++) {
-            echoService.echo("test " + j);
+            String message = "test " + j;
+            String actualMessage = echoService.echo(message);
+            assertEquals(message, actualMessage);
         }
     }
 }
