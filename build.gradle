@@ -33,6 +33,10 @@ dependencies {
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: mariadb_version
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: swagger_version
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: swagger_version
+    implementation group: 'io.dropwizard.metrics', name: 'metrics-core', version: metrics_version
+    implementation group: 'io.dropwizard.metrics', name: 'metrics-graphite', version: metrics_version
+    implementation group: 'io.dropwizard.metrics', name: 'metrics-jmx', version: metrics_version
+    implementation group: 'com.ryantenney.metrics', name: 'metrics-spring', version: ryantenney_version
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version

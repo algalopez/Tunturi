@@ -105,6 +105,18 @@ task orchestrateContainersDown(type: Exec) {
     args('-f', "${projectDir}/docker/docker-compose.yml", 'down')
 }
 
+task orchestrateGrafanaContainersUp(type: Exec) {
+    group 'tunturi-docker-compose'
+    executable "docker-compose"
+    args('-f', "${projectDir}/docker/grafana-docker-compose.yml", 'up', '-d')
+}
+
+task orchestrateGrafanaContainersDown(type: Exec) {
+    group 'tunturi-docker-compose'
+    executable "docker-compose"
+    args('-f', "${projectDir}/docker/grafana-docker-compose.yml", 'down')
+}
+
 /*
 Docker publish commands
 
