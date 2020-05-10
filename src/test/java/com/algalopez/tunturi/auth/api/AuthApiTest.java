@@ -1,7 +1,6 @@
 package com.algalopez.tunturi.auth.api;
 
 import com.algalopez.tunturi.TunturiApplication;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TunturiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Transactional
-@Slf4j
 @TestPropertySource(locations = "classpath:test.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AuthApiTest {

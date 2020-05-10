@@ -1,0 +1,50 @@
+// Utils
+void waitForDatabase() {
+    exec {
+        commandLine 'bash', "${projectDir}/docker/script/WaitForDatabase.sh", "url=127.0.0.1", "port=10301", "user=user", "pass=pass"
+    }
+}
+
+// Docker compose commands
+task buildContainersUp(type: Exec) {
+    group 'tunturi-docker-compose'
+    executable "docker-compose"
+    args('-f', "${projectDir}/deploy/build/docker-compose.yml", 'up', '--build', '-d')
+    doLast {
+        waitForDatabase()
+    }
+}
+
+task buildContainersDown(type: Exec) {
+    group 'tunturi-docker-compose'
+    executable "docker-compose"
+    args('-f', "${projectDir}/deploy/build/docker-compose.yml", 'down', '--remove-orphans')
+}
+
+task localContainersUp(type: Exec) {
+    group 'tunturi-docker-compose'
+    executable "docker-compose"
+    args('-f', "${projectDir}/deploy/build/docker-compose.yml", 'up', '-d')
+    doLast {
+        waitForDatabase()
+    }
+}
+
+task localContainersDown(type: Exec) {
+    group 'tunturi-docker-compose'
+    executable "docker-compose"
+    args('-f', "${projectDir}/deploy/build/docker-compose.yml", 'down', '--remove-orphans')
+}
+
+task grafanaContainersUp(type: Exec) {
+    group 'tunturi-docker-compose'
+    executable "docker-compose"
+    args('-f', "${projectDir}/deploy/local/docker-compose-grafana.yml", 'up', '-d')
+}
+
+task grafanaContainersDown(type: Exec) {
+    group 'tunturi-docker-compose'
+    executable "docker-compose"
+    args('-f', "${projectDir}/deploy/local/docker-compose-grafana.yml", 'down')
+}
+

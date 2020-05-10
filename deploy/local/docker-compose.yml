@@ -1,0 +1,50 @@
+version: "3"
+services:
+    graphite:
+        tty: true
+        image: graphiteapp/graphite-statsd
+        container_name: tunturi-graphite
+        ports:
+            - "80:80"
+            - "2003-2004:2003-2004"
+            - "2023-2024:2023-2024"
+            - "8125:8125/udp"
+            - "8126:8126"
+        networks:
+            - tunturi_network
+    grafana:
+        image: grafana/grafana:6.6.2
+        container_name: tunturi-grafana
+        ports:
+            - "3000:3000"
+        networks:
+            - tunturi_network
+        depends_on:
+            - graphite
+    db:
+        image: algalopez/tunturi-db:1.0.0-SNAPSHOT
+        container_name: tunturi-db
+        ports:
+            - "10301:3306"
+        environment:
+            - MARIADB_ROOT_PASSWORD=pass
+            - MARIADB_DATABASE=tunturi
+            - MARIADB_USER=user
+            - MARIADB_PASSWORD=pass
+            - MARIADB_INITDB_SKIP_TZINFO=1
+        networks:
+            - tunturi_network
+    app:
+        image: algalopez/tunturi-app:1.0.0-SNAPSHOT
+        container_name: tunturi-app
+        ports:
+            - "10300:10300"
+        env_file:
+            - application.env
+        networks:
+            - tunturi_network
+        depends_on:
+            - db
+networks:
+    tunturi_network:
+        driver: bridge
