@@ -38,10 +38,10 @@ jobs:
                     ./gradlew jacocoTestReport
                     ./gradlew sonarqube
             -   name: Upload artifacts
-                    uses: actions/upload-artifact@v1
-                    with:
-                        name: jar
-                        path: 'artifact/bin/*.jar'
+                uses: actions/upload-artifact@v1
+                with:
+                    name: jar
+                    path: 'artifact/bin/*.jar'
     qwe:
         name: Push to registry
         needs: build
