@@ -1,0 +1,62 @@
+name: Tunturi CICD Pipeline
+on:
+    push:
+        branches:
+            -   master
+            -   develop
+            -   'pipeline/**'
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+            -   name: Java version
+                uses: actions/setup-java@v1
+                with:
+                    java-version: '11.0.7'
+                    java-package: jdk
+                    architecture: x64
+            -   name: Echo
+                run: echo hello
+            -   name: Build and unit tests
+                run: |
+                    chmod +x gradlew
+                    ./gradlew buildDatabaseDocker
+                    ./gradlew runDatabaseDocker
+                    ./gradlew createDb
+                    ./gradlew clean build
+                    ./gradlew copyArtifacts
+                    ./gradlew zipArtifacts
+
+            -   name: Quality gate
+                uses: SonarSource/sonarcloud-github-action@v1.2
+                env:
+                    SECRET: ${{ secrets.SONARCLOUD_TOKEN }}
+                run: |
+                    echo hello
+                    ./gradlew jacocoTestReport
+                    ./gradlew sonarqube
+            -   name: Upload artifacts
+                    uses: actions/upload-artifact@v1
+                    with:
+                        name: jar
+                        path: 'artifact/bin/*.jar'
+    qwe:
+        name: Push to registry
+        needs: build
+        runs-on: ubuntu-latest
+            steps:
+                -   name: echo
+                    run: echo hello
+#                -   name: Download math result for job 1
+#                    uses: actions/download-artifact@v1
+#                    with:
+#                        name: homework
+#                -   name: Push to docker hub
+#                    uses: docker/build-push-action@v1
+#                    with:
+#                        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+#                        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+#                        repository: my-docker-hub-namespace/my-docker-hub-repository
+#                        tag_with_ref: true
