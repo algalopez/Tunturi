@@ -46,9 +46,9 @@ jobs:
         name: Push to registry
         needs: build
         runs-on: ubuntu-latest
-            steps:
-                -   name: echo
-                    run: echo hello
+        steps:
+            -   name: echo
+                run: echo hello
 #                -   name: Download math result for job 1
 #                    uses: actions/download-artifact@v1
 #                    with:
