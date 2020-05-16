@@ -68,12 +68,9 @@ jobs:
                     ./gradlew publishAppImage
                     ./gradlew logoutFromRegistry
             -   name: Publish to GitHub registry
-                run: echo qwe
+                run: |
+                    docker login docker.pkg.github.com --username ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+                    ./gradlew publishDatabaseImage
+                    ./gradlew publishAppImage
+                    docker logout docker.pkg.github.com
 
-#                -   name: Push to docker hub
-#                    uses: docker/build-push-action@v1
-#                    with:
-#                        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-#                        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-#                        repository: my-docker-hub-namespace/my-docker-hub-repository
-#                        tag_with_ref: true
