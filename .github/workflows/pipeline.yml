@@ -51,12 +51,22 @@ jobs:
                 uses: actions/download-artifact@v1
                 with:
                     name: artifacts
-            -   name: Build images
+                    path: 'artifact/bin/'
+            -   name: Build images and create atgs
                 run: |
+                    ls -la artifact/bin
                     ./gradlew buildDatabaseDocker
                     ./gradlew buildAppDocker
+                    ./gradlew createDatabaseTag
+                    ./gradlew createAppTag
             -   name: Publish to DockerHub registry
-                run: echo asd
+                env:
+                    DOCKERHUB_REGISTRY_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+                run: |
+                    ./gradlew loginToRegistry
+                    ./gradlew publishDatabaseImage
+                    ./gradlew publishAppImage
+                    ./gradlew logoutFromRegistry
             -   name: Publish to GitHub registry
                 run: echo qwe
 
