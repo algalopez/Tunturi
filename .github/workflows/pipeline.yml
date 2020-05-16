@@ -20,6 +20,8 @@ jobs:
                     architecture: x64
             -   name: Build and unit tests
                 run: |
+                    PROJECT_VERSION=`cat gradle.properties | grep "project_version" | cut -d'=' -f2`
+                    echo $PROJECT_VERSION
                     chmod +x gradlew
                     ./gradlew buildDatabaseDocker
                     ./gradlew runDatabaseDocker
@@ -40,7 +42,7 @@ jobs:
                 with:
                     name: artifacts
                     path: 'artifact/bin/'
-    qwe:
+    publish:
         name: Push to registry
         needs: build
         runs-on: ubuntu-latest
@@ -69,8 +71,20 @@ jobs:
                     ./gradlew logoutFromRegistry
             -   name: Publish to GitHub registry
                 run: |
+                    PROJECT_VERSION=`cat gradle.properties | grep "project_version" | cut -d'=' -f2`
                     docker login docker.pkg.github.com --username ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-                    ./gradlew publishDatabaseImage
-                    ./gradlew publishAppImage
+                    docker push docker.pkg.github.com/algalopez/tunturi/tunturi-db:PROJECT_VERSION
+                    docker push docker.pkg.github.com/algalopez/tunturi/tunturi-app:PROJECT_VERSION
                     docker logout docker.pkg.github.com
 
+#login: docker login docker.pkg.github.com --username algalopez -p <TOKEN>
+#login: docker login --username algalopez -p <TOKEN>
+#logout: docker logout docker.pkg.github.com
+#logout: docker logout
+#dbTag: docker tag db-docker docker.pkg.github.com/algalopez/tunturi/tunturi-db-docker:<PROJECT_VERSION>
+#dbTag: docker tag db-docker algalopez/tunturi-db:<PROJECT_VERSION>
+#appTag: docker tag app-docker docker.pkg.github.com/algalopez/tunturi/tunturi-app-docker:<PROJECT_VERSION>
+#appTag: docker tag app-docker algalopez/tunturi-app:<PROJECT_VERSION>
+#bdPublish: docker push docker.pkg.github.com/algalopez/tunturi/tunturi-db-docker:<PROJECT_VERSION>
+#bdPublish: docker push algalopez/tunturi-db:<PROJECT_VERSION>
+#appPublish: docker push docker.pkg.github.com/algalopez/tunturi/tunturi-app-docker:<PROJECT_VERSION>
