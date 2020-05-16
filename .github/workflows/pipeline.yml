@@ -32,7 +32,7 @@ jobs:
             -   name: Quality gate
 #                uses: SonarSource/sonarcloud-github-action@v1.2
                 env:
-                    SECRET: ${{ secrets.SONARCLOUD_TOKEN }}
+                    SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 #                with:
 #                    - organization: "algalopez"
                 run: |
