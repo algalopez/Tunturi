@@ -1,0 +1,37 @@
+name: Tunturi PR Pipeline
+on: pull_request
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+            -   name: Set Java version
+                uses: actions/setup-java@v1
+                with:
+                    java-version: '11.0.7'
+                    java-package: jdk
+                    architecture: x64
+            -   name: Build and Unit test
+                run: |
+                    chmod +x gradlew
+                    ./gradlew buildDatabaseDocker
+                    ./gradlew runDatabaseDocker
+                    ./gradlew createDb
+                    ./gradlew clean build
+                    ./gradlew copyArtifacts
+                    ./gradlew zipArtifacts
+
+            -   name: Quality gate
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+                run: |
+                    ./gradlew jacocoTestReport
+                    ./gradlew sonarqube -Dsonar.organization=algalopez -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN
+            -   name: Upload artifacts
+                uses: actions/upload-artifact@v2
+                with:
+                    name: artifacts
+                    path: 'artifact/bin/'

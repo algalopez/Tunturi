@@ -52,17 +52,17 @@ jobs:
                 with:
                     name: artifacts
                     path: 'artifact/bin/'
-            -   name: Build images and create tags
+            -   name: Build images
                 run: |
                     ls -la artifact/bin
                     ./gradlew buildDatabaseDocker
                     ./gradlew buildAppDocker
-                    ./gradlew createDatabaseTag
-                    ./gradlew createAppTag
             -   name: Publish to DockerHub registry
                 env:
                     DOCKERHUB_REGISTRY_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
                 run: |
+                    ./gradlew createDatabaseTag
+                    ./gradlew createAppTag
                     ./gradlew loginToRegistry
                     ./gradlew publishDatabaseImage
                     ./gradlew publishAppImage
@@ -70,9 +70,9 @@ jobs:
             -   name: Publish to GitHub registry
                 run: |
                     PROJECT_VERSION=`cat gradle.properties | grep "project_version" | cut -d'=' -f2`
-                    docker tag db-docker docker.pkg.github.com/algalopez/tunturi/tunturi-db:<PROJECT_VERSION>
-                    docker tag app-docker docker.pkg.github.com/algalopez/tunturi/tunturi-app:<PROJECT_VERSION>
+                    docker tag db-docker docker.pkg.github.com/algalopez/tunturi/tunturi-db:$PROJECT_VERSION
+                    docker tag app-docker docker.pkg.github.com/algalopez/tunturi/tunturi-app:$PROJECT_VERSION
                     docker login docker.pkg.github.com --username ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-                    docker push docker.pkg.github.com/algalopez/tunturi/tunturi-db:PROJECT_VERSION
-                    docker push docker.pkg.github.com/algalopez/tunturi/tunturi-app:PROJECT_VERSION
+                    docker push docker.pkg.github.com/algalopez/tunturi/tunturi-db:$PROJECT_VERSION
+                    docker push docker.pkg.github.com/algalopez/tunturi/tunturi-app:$PROJECT_VERSION
                     docker logout docker.pkg.github.com
