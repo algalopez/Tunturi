@@ -30,7 +30,7 @@ jobs:
                     ./gradlew zipArtifacts
 
             -   name: Quality gate
-                uses: SonarSource/sonarcloud-github-action@v1.2
+#                uses: SonarSource/sonarcloud-github-action@v1.2
                 env:
                     SECRET: ${{ secrets.SONARCLOUD_TOKEN }}
 #                with:
