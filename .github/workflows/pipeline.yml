@@ -28,20 +28,17 @@ jobs:
                     ./gradlew zipArtifacts
 
             -   name: Quality gate
-#                uses: SonarSource/sonarcloud-github-action@v1.2
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                     SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-#                with:
-#                    - organization: "algalopez"
                 run: |
                     ./gradlew jacocoTestReport
                     ./gradlew sonarqube -Dsonar.organization=algalopez -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN
             -   name: Upload artifacts
-                uses: actions/upload-artifact@v1
+                uses: actions/upload-artifact@v2
                 with:
                     name: jar
-                    path: 'artifact/bin/*.jar'
+                    path: 'artifact/bin/'
     qwe:
         name: Push to registry
         needs: build
