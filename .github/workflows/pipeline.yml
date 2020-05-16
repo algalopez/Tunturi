@@ -12,16 +12,14 @@ jobs:
         steps:
             -   name: Checkout
                 uses: actions/checkout@v2
-            -   name: Java version
+            -   name: Set Java version
                 uses: actions/setup-java@v1
                 with:
                     java-version: '11.0.7'
                     java-package: jdk
                     architecture: x64
-            -   name: Build and unit tests
+            -   name: Build and Unit test
                 run: |
-                    PROJECT_VERSION=`cat gradle.properties | grep "project_version" | cut -d'=' -f2`
-                    echo $PROJECT_VERSION
                     chmod +x gradlew
                     ./gradlew buildDatabaseDocker
                     ./gradlew runDatabaseDocker
@@ -43,7 +41,7 @@ jobs:
                     name: artifacts
                     path: 'artifact/bin/'
     publish:
-        name: Push to registry
+        name: Publish docker images to registry
         needs: build
         runs-on: ubuntu-latest
         steps:
@@ -54,7 +52,7 @@ jobs:
                 with:
                     name: artifacts
                     path: 'artifact/bin/'
-            -   name: Build images and create atgs
+            -   name: Build images and create tags
                 run: |
                     ls -la artifact/bin
                     ./gradlew buildDatabaseDocker
@@ -72,19 +70,9 @@ jobs:
             -   name: Publish to GitHub registry
                 run: |
                     PROJECT_VERSION=`cat gradle.properties | grep "project_version" | cut -d'=' -f2`
+                    docker tag db-docker docker.pkg.github.com/algalopez/tunturi/tunturi-db:<PROJECT_VERSION>
+                    docker tag app-docker docker.pkg.github.com/algalopez/tunturi/tunturi-app:<PROJECT_VERSION>
                     docker login docker.pkg.github.com --username ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
                     docker push docker.pkg.github.com/algalopez/tunturi/tunturi-db:PROJECT_VERSION
                     docker push docker.pkg.github.com/algalopez/tunturi/tunturi-app:PROJECT_VERSION
                     docker logout docker.pkg.github.com
-
-#login: docker login docker.pkg.github.com --username algalopez -p <TOKEN>
-#login: docker login --username algalopez -p <TOKEN>
-#logout: docker logout docker.pkg.github.com
-#logout: docker logout
-#dbTag: docker tag db-docker docker.pkg.github.com/algalopez/tunturi/tunturi-db-docker:<PROJECT_VERSION>
-#dbTag: docker tag db-docker algalopez/tunturi-db:<PROJECT_VERSION>
-#appTag: docker tag app-docker docker.pkg.github.com/algalopez/tunturi/tunturi-app-docker:<PROJECT_VERSION>
-#appTag: docker tag app-docker algalopez/tunturi-app:<PROJECT_VERSION>
-#bdPublish: docker push docker.pkg.github.com/algalopez/tunturi/tunturi-db-docker:<PROJECT_VERSION>
-#bdPublish: docker push algalopez/tunturi-db:<PROJECT_VERSION>
-#appPublish: docker push docker.pkg.github.com/algalopez/tunturi/tunturi-app-docker:<PROJECT_VERSION>
