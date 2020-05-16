@@ -7,16 +7,17 @@ on:
             -   'pipeline/**'
 jobs:
     build:
+        name: Build
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
-            -   name: Java version
-                uses: actions/setup-java@v1
-                with:
-                    java-version: '11.0.7'
-                    java-package: jdk
-                    architecture: x64
+                - uses: actions/checkout@v2
+#            -   name: Java version
+                - uses: actions/setup-java@v1
+                    with:
+                        java-version: '11.0.7'
+                        java-package: jdk
+                        architecture: x64
             -   name: Build and unit tests
                 run: |
                     chmod +x gradlew
@@ -37,19 +38,28 @@ jobs:
             -   name: Upload artifacts
                 uses: actions/upload-artifact@v2
                 with:
-                    name: jar
+                    name: artifacts
                     path: 'artifact/bin/'
     qwe:
         name: Push to registry
         needs: build
         runs-on: ubuntu-latest
         steps:
-            -   name: echo
-                run: echo hello
-#                -   name: Download math result for job 1
-#                    uses: actions/download-artifact@v1
-#                    with:
-#                        name: homework
+            -   name: Checkout
+                uses: actions/checkout@v2
+            -   name: Download artifacts
+                uses: actions/download-artifact@v1
+                with:
+                    name: artifacts
+            -   name: Build images
+                run:
+                    - ./gradlew buildDatabaseDocker
+                    - ./gradlew buildAppDocker
+            -   name: Publish to DockerHub registry
+                run: echo asd
+            -   name: Publish to GitHub registry
+                run: echo qwe
+
 #                -   name: Push to docker hub
 #                    uses: docker/build-push-action@v1
 #                    with:
