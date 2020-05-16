@@ -17,8 +17,6 @@ jobs:
                     java-version: '11.0.7'
                     java-package: jdk
                     architecture: x64
-            -   name: Echo
-                run: echo hello
             -   name: Build and unit tests
                 run: |
                     chmod +x gradlew
@@ -32,6 +30,7 @@ jobs:
             -   name: Quality gate
 #                uses: SonarSource/sonarcloud-github-action@v1.2
                 env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                     SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 #                with:
 #                    - organization: "algalopez"
