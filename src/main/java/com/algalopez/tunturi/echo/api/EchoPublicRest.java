@@ -16,7 +16,7 @@ public class EchoPublicRest {
 
     private static final String PARAMETER_NAME = "message";
 
-    private EchoService echoService;
+    private final EchoService echoService;
 
     public EchoPublicRest(EchoService echoService) {
         this.echoService = echoService;

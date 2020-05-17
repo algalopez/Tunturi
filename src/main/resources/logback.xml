@@ -18,7 +18,7 @@
         </encoder>
         <file>logs/Tunturi.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>logs/Tunturi.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <fileNamePattern>log/Tunturi.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>10</maxHistory>
         </rollingPolicy>
@@ -32,7 +32,7 @@
         </encoder>
         <file>logs/TunturiAuditor.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/TunturiAuditor.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>log/TunturiAuditor.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>3</maxHistory>
         </rollingPolicy>
     </appender>

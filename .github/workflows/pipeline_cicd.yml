@@ -1,0 +1,78 @@
+name: Tunturi CICD Pipeline
+on:
+    push:
+        branches:
+            -   master
+            -   develop
+            -   'pipeline/**'
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+            -   name: Set Java version
+                uses: actions/setup-java@v1
+                with:
+                    java-version: '11.0.7'
+                    java-package: jdk
+                    architecture: x64
+            -   name: Build and Unit test
+                run: |
+                    chmod +x gradlew
+                    ./gradlew buildDatabaseDocker
+                    ./gradlew runDatabaseDocker
+                    ./gradlew createDb
+                    ./gradlew clean build
+                    ./gradlew copyArtifacts
+                    ./gradlew zipArtifacts
+
+            -   name: Quality gate
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+                run: |
+                    ./gradlew jacocoTestReport
+                    ./gradlew sonarqube -Dsonar.organization=algalopez -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_TOKEN
+            -   name: Upload artifacts
+                uses: actions/upload-artifact@v2
+                with:
+                    name: artifacts
+                    path: 'artifact/bin/'
+    publish:
+        name: Publish docker images to registry
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+            -   name: Download artifacts
+                uses: actions/download-artifact@v1
+                with:
+                    name: artifacts
+                    path: 'artifact/bin/'
+            -   name: Build images
+                run: |
+                    ls -la artifact/bin
+                    ./gradlew buildDatabaseDocker
+                    ./gradlew buildAppDocker
+            -   name: Publish to DockerHub registry
+                env:
+                    DOCKERHUB_REGISTRY_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+                run: |
+                    ./gradlew createDatabaseTag
+                    ./gradlew createAppTag
+                    ./gradlew loginToRegistry
+                    ./gradlew publishDatabaseImage
+                    ./gradlew publishAppImage
+                    ./gradlew logoutFromRegistry
+            -   name: Publish to GitHub registry
+                run: |
+                    PROJECT_VERSION=`cat gradle.properties | grep "project_version" | cut -d'=' -f2`
+                    docker tag tunturi-db docker.pkg.github.com/algalopez/tunturi/tunturi-db:$PROJECT_VERSION
+                    docker tag tunturi-app docker.pkg.github.com/algalopez/tunturi/tunturi-app:$PROJECT_VERSION
+                    docker login docker.pkg.github.com --username ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+                    docker push docker.pkg.github.com/algalopez/tunturi/tunturi-db:$PROJECT_VERSION
+                    docker push docker.pkg.github.com/algalopez/tunturi/tunturi-app:$PROJECT_VERSION
+                    docker logout docker.pkg.github.com

@@ -4,55 +4,49 @@
 
 Build database container
 
-```docker build -f docker/db/Dockerfile -t db-docker .```
+```docker build -f docker/db/Dockerfile -t tunturi-db .```
 
 Build app container
 
-```docker build -f docker/app/Dockerfile -t app-docker .```
+```docker build -f docker/app/Dockerfile -t tunturi-app .```
 
 ## Running containers
 
-Run container created from dockerfile
+Run db container created from dockerfile
 
-```docker run --name db-docker -d -p 10301:3306 db-docker```
+```
+docker run --name db-docker -d -p 10301:3306 tunturi-db 
+    -e MARIADB_ROOT_PASSWORD=pass 
+    -e MARIADB_DATABASE=tunturi 
+    -e MARIADB_USER=user 
+    -e MARIADB_PASSWORD=pass 
+    -e MARIADB_INITDB_SKIP_TZINFO=1 
+    tunturi-db
+```
 
-Run container created directly from images
+Run app container created from dockerfile
 
-```docker run -d --name db -p 10301:3306 -e MARIADB_ROOT_PASSWORD=pass -e MARIADB_DATABASE=prueba -e MARIADB_USER=user -e MARIADB_PASSWORD=pass mariadb/server:10.1```
+``` docker run --env-file docker/app/application.env -p 10300:10300 --name tunturi-app -d tunturi-app```
 
-```docker run -d --name db -p 10301:3306 -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_DATABASE=prueba mysql:5.7```
+## Execute containers interactively
 
-## Orchestrating containers
+Execute commands
 
-Services up
+```docker exec -it tunturi-db /bin/bash```
 
-```docker-compose -f docker/docker-compose.yml up -d```
-
-Services down
-
-```docker-compose -f docker/docker-compose.yml down```
-
-## Execute container interactively
-
-Execute bash console
-
-```docker exec -it db /bin/bash```
-
-Execute mysql
-
-```docker exec -it db mysql -uroot -ppass -h127.0.0.1 -P10301```
+```docker exec -it tunturi-db mysql -uroot -ppass -h127.0.0.1 -P10301 show databases;```
 
 ## Other docker commands
 
-```docker pull mariadb:latest```
-
 ```docker ps -a```
 
-```docker stop db```
+```docker stop tunturi-db```
 
-```docker rm db```
+```docker rm tunturi-db```
 
-```docker rmi db-docker```
+```docker rmi -f tunturi-```
+
+```docker images -f dangling=true | awk '{print $3}' | xargs docker rmi```
 
 ```docker images```
 

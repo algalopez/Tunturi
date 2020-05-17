@@ -1,27 +1,37 @@
 #!/bin/bash
+
 trie=0
-numberOfTries=30
+numberOfTries=40
 secondsBetweenTries=1
 
-user=$(docker exec tunturi-db bash -c 'echo "$MARIADB_USER"' 2> /dev/null)
-pass=$(docker exec tunturi-db bash -c 'echo "$MARIADB_PASSWORD"' 2> /dev/null)
-url=$(docker exec tunturi-db bash -c 'echo "$DATABASE_URL"' 2> /dev/null)
-port=$(docker exec tunturi-db bash -c 'echo "$DATABASE_PORT"' 2> /dev/null)
+#Default values
+user=user
+pass=pass
+url=127.0.0.1
+port=10301
 
-while [ $((++trie)) -le $numberOfTries ]
-do
+# Named arguments
+for ARGUMENT in "$@"; do
+    KEY=$(echo $ARGUMENT | cut -f1 -d=)
+    VALUE=$(echo $ARGUMENT | cut -f2 -d=)
+    case "$KEY" in
+    url) url=${VALUE} ;;
+    port) port=${VALUE} ;;
+    user) user=${VALUE} ;;
+    pass) pass=${VALUE} ;;
+    *) ;;
+    esac
+done
 
-  status=$(echo "show databases;" | mysql -u $user -p$pass -h$url -P$port 2> /dev/null | grep tunturi)
-
-  if [[ $status == "tunturi" ]]
-  then
-    echo Database is ready
-    exit 0
-  else
-    echo 'Waiting for database' $trie
-    sleep $secondsBetweenTries
-  fi
-
+while [ $((++trie)) -le $numberOfTries ]; do
+    status=$(echo "show databases;" | mysql -u $user -p$pass -h$url -P$port 2>/dev/null | grep tunturi)
+    if [[ $status == "tunturi" ]]; then
+        echo 'Database is ready'
+        exit 0
+    else
+        echo 'Waiting for database' $trie
+        sleep $secondsBetweenTries
+    fi
 done
 
 exit 1

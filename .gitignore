@@ -8,8 +8,8 @@
 .idea/
 build/
 out/
-logs/
-deploy/
+log/
+artifact/
 
 # Root
 local.properties
