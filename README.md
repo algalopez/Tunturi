@@ -49,26 +49,26 @@ Docker
 
 Deployment (Not implemented yet): 
 
-[![Deployments](https://img.shields.io/github/deployments/algalopez/tunturi/tunturi)]()
+[![Deployments](https://img.shields.io/github/deployments/algalopez/tunturi/tunturi)](https://github.com/algalopez/Tunturi/deployments)
 
 Progress
 
-[![Tag SemVer](https://img.shields.io/github/v/tag/algalopez/tunturi)]()
-[![Milestone progress](https://img.shields.io/github/milestones/progress/algalopez/tunturi/1?label=milestone%201.0.0&color=yellow)]()
+[![Tag SemVer](https://img.shields.io/github/v/tag/algalopez/tunturi?color=yellow)](https://github.com/algalopez/Tunturi/releases)
+[![Milestone progress](https://img.shields.io/github/milestones/progress/algalopez/tunturi/1?label=milestone%201.0.0&color=yellow)](https://github.com/algalopez/Tunturi/milestones)
 
 <details>
 <summary>See full progress</summary>
 
-[![Tag SemVer](https://img.shields.io/github/v/tag/algalopez/tunturi)]()
-[![Milestone progress](https://img.shields.io/github/milestones/progress/algalopez/tunturi/1?label=milestone%201.0.0&color=yellow)]()
+[![Tag SemVer](https://img.shields.io/github/v/tag/algalopez/tunturi?color=yellow)](https://github.com/algalopez/Tunturi/releases)
+[![Milestone progress](https://img.shields.io/github/milestones/progress/algalopez/tunturi/1?label=milestone%201.0.0&color=yellow)](https://github.com/algalopez/Tunturi/milestones)
 
-[![Open issues](https://img.shields.io/github/issues-raw/algalopez/tunturi?color=yellow)]()
-[![Closed issues](https://img.shields.io/github/issues-closed-raw/algalopez/tunturi?color=yellow)]()
-[![Open PR](https://img.shields.io/github/issues-pr-raw/algalopez/tunturi?color=yellow)]()
+[![Open issues](https://img.shields.io/github/issues-raw/algalopez/tunturi?color=yellow)](https://github.com/algalopez/Tunturi/issues)
+[![Closed issues](https://img.shields.io/github/issues-closed-raw/algalopez/tunturi?color=yellow)](https://github.com/algalopez/Tunturi/issues?q=is%3Aissue+is%3Aclosed)
+[![Open PR](https://img.shields.io/github/issues-pr-raw/algalopez/tunturi?color=yellow)](https://github.com/algalopez/Tunturi/pulls)
 
-[![Commits since tag](https://img.shields.io/github/commits-since/algalopez/tunturi/1.0.0/develop)]()
-[![Commit activity](https://img.shields.io/github/commit-activity/y/algalopez/tunturi)]()
-[![Contributors](https://img.shields.io/github/contributors/algalopez/tunturi)]()
+[![Commits since tag](https://img.shields.io/github/commits-since/algalopez/tunturi/1.0.0/develop?color=yellow)](https://github.com/algalopez/Tunturi/commits/develop)
+[![Commit activity](https://img.shields.io/github/commit-activity/y/algalopez/tunturi?color=yellow)](https://github.com/algalopez/Tunturi/commits/develop)
+[![Contributors](https://img.shields.io/github/contributors/algalopez/tunturi?color=yellow)](https://github.com/algalopez/Tunturi/graphs/contributors)
 
 </details>
 
