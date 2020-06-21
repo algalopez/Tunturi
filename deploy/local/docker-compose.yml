@@ -22,7 +22,7 @@ services:
         depends_on:
             - graphite
     db:
-        image: algalopez/tunturi-db:1.0.0
+        image: algalopez/tunturi-db:1.1.0-SNAPSHOT
         container_name: tunturi-db
         ports:
             - "10400:3306"
@@ -35,7 +35,7 @@ services:
         networks:
             - tunturi_network
     app:
-        image: algalopez/tunturi-app:1.0.0
+        image: algalopez/tunturi-app:1.1.0-SNAPSHOT
         container_name: tunturi-app
         ports:
             - "10300:8080"
