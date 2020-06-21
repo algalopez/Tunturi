@@ -54,7 +54,6 @@ Deployment (Not implemented yet):
 Progress
 
 [![Tag SemVer](https://img.shields.io/github/v/tag/algalopez/tunturi?color=yellow)](https://github.com/algalopez/Tunturi/releases)
-[![Milestone progress](https://img.shields.io/github/milestones/progress/algalopez/tunturi/1?label=milestone%201.0.0&color=yellow)](https://github.com/algalopez/Tunturi/milestones)
 
 <details>
 <summary>See full progress</summary>
@@ -103,4 +102,4 @@ Progress
 
 ## Playing with the app
 
-[Link to doc readme](doc/README.md)
+[Link to documentation readme](documentation/README.md)

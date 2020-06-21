@@ -2,7 +2,7 @@
 
 void waitForDatabase() {
     exec {
-        commandLine 'bash', "${projectDir}/docker/script/WaitForDatabase.sh", "url=127.0.0.1", "port=10301", "user=user", "pass=pass"
+        commandLine 'bash', "${projectDir}/docker/script/WaitForDatabase.sh", "url=127.0.0.1", "port=10400", "user=user", "pass=pass"
     }
 }
 
@@ -29,7 +29,7 @@ task buildDatabaseDocker(type: Exec) {
 task runDatabaseDocker(type: Exec) {
     group 'tunturi-docker'
     executable "docker"
-    args('run', '--name', 'tunturi-db', '-d', '-p', '10301:3306',
+    args('run', '--name', 'tunturi-db', '-d', '-p', '10400:3306',
             '-e', 'MARIADB_ROOT_PASSWORD=pass',
             '-e', 'MARIADB_DATABASE=tunturi',
             '-e', 'MARIADB_USER=user',

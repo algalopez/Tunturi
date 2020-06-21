@@ -20,7 +20,7 @@ public class AuthDaoJdbcImpl implements AuthDao {
     private static final String LOCKED_PARAM = "locked";
     private static final String ROLE_PARAM = "role";
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public AuthDaoJdbcImpl(@Autowired NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;

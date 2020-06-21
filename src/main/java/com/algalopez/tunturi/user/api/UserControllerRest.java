@@ -1,11 +1,10 @@
 package com.algalopez.tunturi.user.api;
 
+import com.algalopez.tunturi.user.api.mapper.UserModelMapper;
 import com.algalopez.tunturi.user.api.model.User;
 import com.algalopez.tunturi.user.core.UserService;
-import com.algalopez.tunturi.user.api.mapper.UserModelMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = "Private user management system")
 @RestController
 @RequestMapping("api")
-@Slf4j
 public class UserControllerRest {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserControllerRest(UserService userService) {
         this.userService = userService;

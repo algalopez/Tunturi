@@ -72,14 +72,14 @@ jacocoTestReport {
 }
 
 def dbPreClosure = {
-    url = 'jdbc:mariadb://127.0.0.1:10301/tunturi'
+    url = 'jdbc:mariadb://127.0.0.1:10400/tunturi'
     user = 'user'
     password = 'pass'
     locations = ["filesystem:${projectDir}/database/migration", "filesystem:${projectDir}/database/pre"]
 }
 
 def dbClosure = {
-    url = 'jdbc:mariadb://127.0.0.1:10301/tunturi'
+    url = 'jdbc:mariadb://127.0.0.1:10400/tunturi'
     user = 'user'
     password = 'pass'
     locations = ["filesystem:${projectDir}/database/migration"]

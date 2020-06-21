@@ -15,7 +15,7 @@ Build app container
 Run db container created from dockerfile
 
 ```
-docker run --name db-docker -d -p 10301:3306 tunturi-db 
+docker run --name db-docker -d -p 10400:3306 tunturi-db 
     -e MARIADB_ROOT_PASSWORD=pass 
     -e MARIADB_DATABASE=tunturi 
     -e MARIADB_USER=user 
@@ -34,7 +34,7 @@ Execute commands
 
 ```docker exec -it tunturi-db /bin/bash```
 
-```docker exec -it tunturi-db mysql -uroot -ppass -h127.0.0.1 -P10301 show databases;```
+```docker exec -it tunturi-db mysql -uroot -ppass -h127.0.0.1 -P10400 show databases;```
 
 ## Other docker commands
 

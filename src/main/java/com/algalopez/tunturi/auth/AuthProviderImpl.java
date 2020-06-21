@@ -15,7 +15,7 @@ public class AuthProviderImpl implements AuthenticationProvider {
     private static final String LOCKED_ACCOUNT = "This account has been locked. If this is an error, please contact the admin";
     private static final String DISABLED_ACCOUNT = "This account has been disabled. If this is an error, please contact the admin";
 
-    private AuthServiceImpl userService;
+    private final AuthServiceImpl userService;
 
     public AuthProviderImpl(@Autowired AuthServiceImpl userService) {
         this.userService = userService;

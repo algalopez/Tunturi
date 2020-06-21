@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UserControllerRestPublic {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserControllerRestPublic(UserService userService) {
         this.userService = userService;

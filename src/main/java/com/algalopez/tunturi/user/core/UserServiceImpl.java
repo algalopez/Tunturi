@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserAuthDao userAuthDao;
-    private UserInfoDao userInfoDao;
+    private final UserAuthDao userAuthDao;
+    private final UserInfoDao userInfoDao;
 
     public UserServiceImpl(UserAuthDao userAuthDao, UserInfoDao userInfoDao) {
 
