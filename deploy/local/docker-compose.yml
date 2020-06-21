@@ -25,7 +25,7 @@ services:
         image: algalopez/tunturi-db:1.0.0-SNAPSHOT
         container_name: tunturi-db
         ports:
-            - "10301:3306"
+            - "10400:3306"
         environment:
             - MARIADB_ROOT_PASSWORD=pass
             - MARIADB_DATABASE=tunturi
@@ -38,7 +38,7 @@ services:
         image: algalopez/tunturi-app:1.0.0-SNAPSHOT
         container_name: tunturi-app
         ports:
-            - "10300:10300"
+            - "10300:8080"
         env_file:
             - application.env
         networks:

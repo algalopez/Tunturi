@@ -14,7 +14,7 @@ public class UserInfoDaoJdbcImpl implements UserInfoDao {
     private static final String EMAIL_PARAM = "email";
     private static final String LEVEL_PARAM = "level";
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public UserInfoDaoJdbcImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;

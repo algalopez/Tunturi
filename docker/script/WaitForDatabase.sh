@@ -8,7 +8,7 @@ secondsBetweenTries=1
 user=user
 pass=pass
 url=127.0.0.1
-port=10301
+port=10400
 
 # Named arguments
 for ARGUMENT in "$@"; do

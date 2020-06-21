@@ -20,16 +20,11 @@ We can use gradle tasks to make our lives easier.
 
 Local deployment let you deploy any of the images available in docker hub.
 
-Until a deployment shell script exists, it is possible to deploy using gradle tasks as in the build type
+This deployment is not fully automated yet. To use it, a copy of the directory src/database must be in deploy/local/flyway.
 
-1. ```gradle localContainersUp```
-2. ```gradle createDb``` (or createDbPre to load more data)
-3. ```gradle localContainersDown``` (when finished)
-
-It is also possible to deploy only the monitoring tools graphite and grafana by using gradle tasks
-
-1. ```gradle grafanaContainersUp```
-2. ```gradle grafanaContainersDown```
+1. ```deploy-local-sh```
+2. ```migrate-database.sh```
+3. ```unDeploy-local.sh``` (when finished)
 
 ## Deploy in cloud
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AuthServiceImpl implements UserDetailsService {
 
-    private AuthDao authDao;
+    private final AuthDao authDao;
 
     public AuthServiceImpl(@Autowired AuthDao authDao) {
         this.authDao = authDao;

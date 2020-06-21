@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class UserControllerRestAdmin {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserControllerRestAdmin(UserService userService) {
         this.userService = userService;

@@ -1,7 +1,7 @@
 // Utils
 void waitForDatabase() {
     exec {
-        commandLine 'bash', "${projectDir}/docker/script/WaitForDatabase.sh", "url=127.0.0.1", "port=10301", "user=user", "pass=pass"
+        commandLine 'bash', "${projectDir}/docker/script/WaitForDatabase.sh", "url=127.0.0.1", "port=10400", "user=user", "pass=pass"
     }
 }
 
