@@ -2,7 +2,7 @@ name: Tunturi CICD Pipeline
 on:
     push:
         branches:
-            -   master
+            -   trunk
             -   develop
             -   'pipeline/**'
 jobs:
